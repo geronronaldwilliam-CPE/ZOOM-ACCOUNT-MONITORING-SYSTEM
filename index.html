@@ -36,8 +36,9 @@
         /* ============ BALANSE AT PROFESSIONAL HEADER ============ */
         .main-header {
             background-color: var(--card-bg);
+            border-top: 4px solid var(--primary-color); /* Premium brand colored line edge */
             border-bottom: 1px solid var(--border-color);
-            padding: 0.8rem 2rem; /* Saktong kapal para hindi mukhang masikip ang mga logo */
+            padding: 0.8rem 2rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
 
@@ -57,14 +58,14 @@
         }
 
         .system-logo {
-            height: 44px; /* Saktong laki para sa Zoom Logo */
+            height: 44px;
             width: auto;
             object-fit: contain;
         }
 
-        /* DICT LOGO PERFECT STYLE */
+        /* DICT LOGO INTEGRATED PROFILE */
         .right-header-section .dict-logo {
-            height: 120px; /* Tamang sukat para malinaw at hindi maliit tingnan */
+            height: 125px; /* Optimized premium profile pairing */
             width: auto;
             object-fit: contain;
             transition: transform 0.2s ease;
@@ -172,18 +173,19 @@
         .capacity-card-header {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
             margin-bottom: 16px;
         }
 
+        /* PREMIUM TINTED FRAME BACKGROUND FOR ICON EMOJIS */
         .capacity-icon {
-            font-size: 20px;
-            width: 48px;
-            height: 48px;
+            font-size: 18px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 12px;
+            border-radius: 50%;
         }
 
         .icon-100 {
@@ -209,36 +211,33 @@
         }
 
         .capacity-desc {
-            font-size: 13px;
+            font-size: 13.5px;
             color: var(--text-secondary);
             margin: 4px 0 24px 0;
         }
 
+        /* ENHANCED INTERACTIVE CTA ACTION BUTTONS */
         .btn {
             width: 100%;
-            padding: 11px 16px;
-            background: #f1f5f9;
-            color: var(--text-primary);
-            border: none;
-            border-radius: 8px;
-            font-size: 13.5px;
+            padding: 13px 16px;
+            background: #f8fafc;
+            color: var(--primary-color);
+            border: 1px solid rgba(14, 113, 235, 0.15);
+            border-radius: 10px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
         .capacity-card:hover .btn {
-            background: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 8px rgba(14, 113, 235, 0.15);
-        }
-
-        .btn:hover {
-            background: #0b59ba !important;
+            background: var(--primary-color) !important;
             color: white !important;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(14, 113, 235, 0.2);
         }
 
-        /* ============ LEGEND BOX WITH EXACT SHEET COLORS ============ */
+        /* ============ LEGEND BOX DESIGN ============ */
         .legend-section {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -258,10 +257,12 @@
             gap: 6px;
         }
 
+        /* BALANCED EQUAL COLS FOR SCANNABILITY */
         .legend-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            width: 100%;
         }
 
         .legend-item {
@@ -273,12 +274,11 @@
         .legend-color-dot {
             width: 14px;
             height: 14px;
-            border-radius: 4px; /* Ginawang square/box para mukhang cell ng sheets */
+            border-radius: 4px;
             margin-top: 4px;
             flex-shrink: 0;
         }
 
-        /* Tugma sa Google Sheets Calendar Cells mo */
         .dot-pink { 
             background-color: #f4cccc; 
             border: 1px solid #e06666;
@@ -426,6 +426,14 @@
             top: 0;
             left: 0;
         }
+
+        /* Responsive Breakpoint for Mobile Screens */
+        @media (max-width: 768px) {
+            .legend-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -503,7 +511,7 @@
                 <div class="legend-item">
                     <div class="legend-color-dot dot-yellow"></div>
                     <div class="legend-text">
-                        <strong>Partially Booked / Under Review</strong>
+                        <strong>Partially Booked</strong>
                         <span>The account is reserved for specific hours. Other time slots on this day remain open and available for booking.</span>
                     </div>
                 </div>
