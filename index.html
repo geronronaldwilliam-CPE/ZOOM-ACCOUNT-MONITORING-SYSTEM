@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Account Monitoring System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #185FA5;
+            --secondary-color: #534AB7;
+            --accent-green: #639922;
+            --light-bg: #f5f5f5;
+            --card-bg: #ffffff;
+            --border-color: #e0e0e0;
+            --text-primary: #2c2c2a;
+            --text-secondary: #888780;
+            --text-muted: #b4b2a9;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* ============ HEADER & LAYOUT ============ */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* ============ CAPACITY CARDS ============ */
+        .capacity-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 2rem;
+        }
+
+        .capacity-card {
+            background: var(--card-bg);
+            border: 0.5px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .capacity-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(24, 95, 165, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .capacity-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .capacity-icon {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+
+        .icon-100 {
+            background-color: rgba(24, 95, 165, 0.1);
+            color: var(--primary-color);
+        }
+
+        .icon-300 {
+            background-color: rgba(83, 74, 183, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .icon-500 {
+            background-color: rgba(99, 153, 34, 0.1);
+            color: var(--accent-green);
+        }
+
+        .capacity-card h2 {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .capacity-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 8px 0;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 10px 12px;
+            margin-top: 12px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #0C447C;
+        }
+
+        /* ============ FORM LINK ============ */
+        .form-section {
+            background: rgba(24, 95, 165, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .form-link-btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* ============ IFRAME MODAL WITH AUTO-ZOOM OUT ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 12px;
+            width: 95%;
+            max-width: 1200px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 0.8rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 1rem;
+            border-bottom: 0.5px solid var(--border-color);
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            background: #f5f5f5;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .iframe-container {
+            flex: 1;
+            width: 100%;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            position: relative;
+        }
+
+        #sheet-iframe {
+            width: 133.33%;
+            height: 133.33%;
+            transform: scale(0.75);
+            transform-origin: top left;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📞 Zoom Account Monitoring System</h1>
+            <p class="subtitle">Track and schedule video conference capacity across your organization</p>
+        </header>
+
+        <div class="form-section">
+            <h3>📝 Add New Event</h3>
+            <p>Click below to submit your event details via Google Form</p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd9Udz_53b3zpiy0gXr2XqPlvm-MqjQ7LeuXsJs7RgOvpgmkw/viewform" target="_blank" class="form-link-btn">➜ Open Google Form</a>
+        </div>
+
+        <section class="capacity-grid">
+            <div class="capacity-card" onclick="openSheetModal('100pax')">
+                <div class="capacity-card-header">
+                    <div class="capacity-icon icon-100">👥</div>
+                    <h2>100 PAX</h2>
+                </div>
+                <p class="capacity-desc">Standard capacity rooms</p>
+                <button class="btn">View Schedule</button>
+            </div>
+
+            <div class="capacity-card" onclick="openSheetModal('300pax')">
+                <div class="capacity-card-header">
+                    <div class="capacity-icon icon-300">👥👥</div>
+                    <h2>300 PAX</h2>
+                </div>
+                <p class="capacity-desc">Medium capacity rooms</p>
+                <button class="btn">View Schedule</button>
+            </div>
+
+            <div class="capacity-card" onclick="openSheetModal('500pax')">
+                <div class="capacity-card-header">
+                    <div class="capacity-icon icon-500">🏢</div>
+                    <h2>500 PAX</h2>
+                </div>
+                <p class="capacity-desc">Large capacity rooms</p>
+                <button class="btn">View Schedule</button>
+            </div>
+        </section>
+    </div>
+
+    <div id="sheet-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-title">Live Spreadsheet View</h2>
+                <button class="close-btn" onclick="closeSheetModal()">Close ✕</button>
+            </div>
+            <div class="iframe-container">
+                <iframe id="sheet-iframe" src="" allowfullscreen></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_LINKS = {
+            '100pax': 'https://docs.google.com/spreadsheets/d/1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M/htmlembed?gid=153213763&widget=false&chrome=false',
+            '300pax': 'https://docs.google.com/spreadsheets/d/1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M/htmlembed?gid=901445594&widget=false&chrome=false',
+            '500pax': 'https://docs.google.com/spreadsheets/d/1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M/htmlembed?gid=1523031348&widget=false&chrome=false'
+        };
+
+        function openSheetModal(capacity) {
+            const modal = document.getElementById('sheet-modal');
+            const iframe = document.getElementById('sheet-iframe');
+            const title = document.getElementById('modal-title');
+
+            title.textContent = `📅 Live Schedule View - ${capacity.toUpperCase()}`;
+            iframe.src = SHEET_LINKS[capacity];
+            modal.classList.add('active');
+        }
+
+        function closeSheetModal() {
+            const modal = document.getElementById('sheet-modal');
+            const iframe = document.getElementById('sheet-iframe');
+
+            modal.classList.remove('active');
+            iframe.src = "";
+        }
+
+        document.getElementById('sheet-modal').addEventListener('click', function (e) {
+            if (e.target === this) closeSheetModal();
+        });
+    </script>
+</body>
+</html>
+
