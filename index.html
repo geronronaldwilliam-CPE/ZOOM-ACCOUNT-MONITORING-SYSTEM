@@ -12,152 +12,348 @@
         }
 
         :root {
-            --primary-color: #185FA5;
-            --secondary-color: #534AB7;
-            --accent-green: #639922;
-            --light-bg: #f5f5f5;
+            --primary-color: #0E71EB;
+            --secondary-color: #6366f1;
+            --accent-green: #10b981;
+            --light-bg: #f8fafc;
             --card-bg: #ffffff;
-            --border-color: #e0e0e0;
-            --text-primary: #2c2c2a;
-            --text-secondary: #888780;
-            --text-muted: #b4b2a9;
+            --border-color: #e2e8f0;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--light-bg);
             color: var(--text-primary);
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-        /* ============ HEADER & LAYOUT ============ */
-        .container {
+        /* ============ BALANSE AT PROFESSIONAL HEADER ============ */
+        .main-header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.8rem 2rem; /* Saktong kapal para hindi mukhang masikip ang mga logo */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+        }
+
+        .header-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
         }
 
-        header {
-            margin-bottom: 2rem;
+        .left-header-section {
+            display: flex;
+            align-items: center;
+            gap: 18px;
         }
 
-        h1 {
-            font-size: 28px;
-            font-weight: 500;
-            margin-bottom: 8px;
+        .system-logo {
+            height: 44px; /* Saktong laki para sa Zoom Logo */
+            width: auto;
+            object-fit: contain;
         }
 
-        .subtitle {
+        /* DICT LOGO PERFECT STYLE */
+        .right-header-section .dict-logo {
+            height: 120px; /* Tamang sukat para malinaw at hindi maliit tingnan */
+            width: auto;
+            object-fit: contain;
+            transition: transform 0.2s ease;
+        }
+
+        .right-header-section .dict-logo:hover {
+            transform: scale(1.05);
+        }
+
+        .brand-text h1 {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
+        }
+
+        .brand-text .subtitle {
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        /* ============ MAIN WRAPPER ============ */
+        .container {
+            flex: 1;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem;
+        }
+
+        /* ============ PREMIUM HERO/FORM SECTION ============ */
+        .form-section {
+            background: linear-gradient(135deg, rgba(14, 113, 235, 0.04) 0%, rgba(99, 102, 241, 0.02) 100%);
+            border: 1px solid rgba(14, 113, 235, 0.12);
+            border-radius: 16px;
+            padding: 2.25rem;
+            margin-bottom: 2.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(14, 113, 235, 0.02);
+        }
+
+        .form-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-primary);
+        }
+
+        .form-section p {
             font-size: 14px;
             color: var(--text-secondary);
+            margin-bottom: 20px;
         }
 
-        /* ============ CAPACITY CARDS ============ */
+        .form-link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 10px rgba(14, 113, 235, 0.15);
+        }
+
+        .form-link-btn:hover {
+            background: #0b59ba;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(14, 113, 235, 0.25);
+        }
+
+        /* ============ MODERN CARDS GRID ============ */
         .capacity-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 16px;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 2.5rem;
         }
 
         .capacity-card {
             background: var(--card-bg);
-            border: 0.5px solid var(--border-color);
-            border-radius: 12px;
-            padding: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 18px;
+            padding: 2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01), 0 1px 2px rgba(0, 0, 0, 0.01);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .capacity-card:hover {
-            border-color: var(--primary-color);
-            box-shadow: 0 4px 12px rgba(24, 95, 165, 0.1);
-            transform: translateY(-2px);
+            border-color: transparent;
+            outline: 1px solid rgba(14, 113, 235, 0.2);
+            box-shadow: 0 12px 25px -5px rgba(14, 113, 235, 0.08), 0 8px 10px -6px rgba(14, 113, 235, 0.04);
+            transform: translateY(-4px);
         }
 
         .capacity-card-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
+            gap: 14px;
+            margin-bottom: 16px;
         }
 
         .capacity-icon {
-            font-size: 24px;
-            width: 40px;
-            height: 40px;
+            font-size: 20px;
+            width: 48px;
+            height: 48px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
+            border-radius: 12px;
         }
 
         .icon-100 {
-            background-color: rgba(24, 95, 165, 0.1);
+            background-color: rgba(14, 113, 235, 0.08);
             color: var(--primary-color);
         }
 
         .icon-300 {
-            background-color: rgba(83, 74, 183, 0.1);
+            background-color: rgba(99, 102, 241, 0.08);
             color: var(--secondary-color);
         }
 
         .icon-500 {
-            background-color: rgba(99, 153, 34, 0.1);
+            background-color: rgba(16, 185, 129, 0.08);
             color: var(--accent-green);
         }
 
         .capacity-card h2 {
-            font-size: 18px;
-            font-weight: 500;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.01em;
         }
 
         .capacity-desc {
             font-size: 13px;
             color: var(--text-secondary);
-            margin: 8px 0;
+            margin: 4px 0 24px 0;
         }
 
         .btn {
             width: 100%;
-            padding: 10px 12px;
-            margin-top: 12px;
-            background: var(--primary-color);
-            color: white;
+            padding: 11px 16px;
+            background: #f1f5f9;
+            color: var(--text-primary);
             border: none;
             border-radius: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 13.5px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.2s ease;
+        }
+
+        .capacity-card:hover .btn {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 8px rgba(14, 113, 235, 0.15);
         }
 
         .btn:hover {
-            background: #0C447C;
+            background: #0b59ba !important;
+            color: white !important;
         }
 
-        /* ============ FORM LINK ============ */
-        .form-section {
-            background: rgba(24, 95, 165, 0.05);
+        /* ============ LEGEND BOX WITH EXACT SHEET COLORS ============ */
+        .legend-section {
+            background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 1.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01);
         }
 
-        .form-link-btn {
-            display: inline-block;
-            background: var(--primary-color);
-            color: white;
-            padding: 10px 16px;
-            border-radius: 8px;
-            text-decoration: none;
+        .legend-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .legend-color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px; /* Ginawang square/box para mukhang cell ng sheets */
+            margin-top: 4px;
+            flex-shrink: 0;
+        }
+
+        /* Tugma sa Google Sheets Calendar Cells mo */
+        .dot-pink { 
+            background-color: #f4cccc; 
+            border: 1px solid #e06666;
+        }
+        .dot-yellow { 
+            background-color: #ffe599; 
+            border: 1px solid #f1c232;
+        }
+        .dot-green { 
+            background-color: #d9ead3; 
+            border: 1px solid #93c47d;
+        }
+
+        .legend-text strong {
+            display: block;
+            font-size: 13.5px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .legend-text span {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        /* ============ PERSONALIZED ENTERPRISE FOOTER ============ */
+        .main-footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            margin-top: auto;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .footer-credits strong {
+            color: var(--text-primary);
+        }
+
+        .footer-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(16, 185, 129, 0.08);
+            color: #065f46;
+            padding: 3px 10px;
+            border-radius: 12px;
             font-weight: 500;
+            font-size: 12px;
         }
 
-        /* ============ IFRAME MODAL WITH AUTO-ZOOM OUT ============ */
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+        }
+
+        /* ============ WALANG GALAWAN: IFRAME MODAL STRUCTURE ============ */
         .modal {
             display: none;
             position: fixed;
@@ -233,47 +429,106 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>📞 Zoom Account Monitoring System</h1>
-            <p class="subtitle">Track and schedule video conference capacity across your organization</p>
-        </header>
 
+    <header class="main-header">
+        <div class="header-container">
+            <div class="left-header-section">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg" alt="Zoom Logo" class="system-logo">
+                <div class="brand-text">
+                    <h1>Account Monitoring System</h1>
+                    <p class="subtitle">Track and schedule video conference capacity across your organization</p>
+                </div>
+            </div>
+            
+            <div class="right-header-section">
+                <img src="DICT.jpg" alt="DICT Logo" class="dict-logo">
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
         <div class="form-section">
-            <h3>📝 Add New Event</h3>
-            <p>Click below to submit your event details via Google Form</p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd9Udz_53b3zpiy0gXr2XqPlvm-MqjQ7LeuXsJs7RgOvpgmkw/viewform" target="_blank" class="form-link-btn">➜ Open Google Form</a>
+            <h3>📝 Request & Add New Event</h3>
+            <p>Click below to open and submit your meeting schedule details instantly via Google Form.</p>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd9Udz_53b3zpiy0gXr2XqPlvm-MqjQ7LeuXsJs7RgOvpgmkw/viewform" target="_blank" class="form-link-btn">
+                <span>Open Google Form</span> ➜
+            </a>
         </div>
 
         <section class="capacity-grid">
             <div class="capacity-card" onclick="openSheetModal('100pax')">
-                <div class="capacity-card-header">
-                    <div class="capacity-icon icon-100">👥</div>
-                    <h2>100 PAX</h2>
+                <div>
+                    <div class="capacity-card-header">
+                        <div class="capacity-icon icon-100">👥</div>
+                        <h2>100 PAX</h2>
+                    </div>
+                    <p class="capacity-desc">Standard capacity layout perfect for teams syncs and standard meetings.</p>
                 </div>
-                <p class="capacity-desc">Standard capacity rooms</p>
                 <button class="btn">View Schedule</button>
             </div>
 
             <div class="capacity-card" onclick="openSheetModal('300pax')">
-                <div class="capacity-card-header">
-                    <div class="capacity-icon icon-300">👥👥</div>
-                    <h2>300 PAX</h2>
+                <div>
+                    <div class="capacity-card-header">
+                        <div class="capacity-icon icon-300">👥👥</div>
+                        <h2>300 PAX</h2>
+                    </div>
+                    <p class="capacity-desc">Medium capacity option designed for larger webinar hostings and trainings.</p>
                 </div>
-                <p class="capacity-desc">Medium capacity rooms</p>
                 <button class="btn">View Schedule</button>
             </div>
 
             <div class="capacity-card" onclick="openSheetModal('500pax')">
-                <div class="capacity-card-header">
-                    <div class="capacity-icon icon-500">🏢</div>
-                    <h2>500 PAX</h2>
+                <div>
+                    <div class="capacity-card-header">
+                        <div class="capacity-icon icon-500">🏢</div>
+                        <h2>500 PAX</h2>
+                    </div>
+                    <p class="capacity-desc">Enterprise-scale room ideal for major company assemblies and forums.</p>
                 </div>
-                <p class="capacity-desc">Large capacity rooms</p>
                 <button class="btn">View Schedule</button>
             </div>
         </section>
+
+        <div class="legend-section">
+            <div class="legend-title">💡 Calendar Color Legend Guide</div>
+            <div class="legend-grid">
+                <div class="legend-item">
+                    <div class="legend-color-dot dot-pink"></div>
+                    <div class="legend-text">
+                        <strong>Fully Booked / Reserved</strong>
+                        <span>A meeting or event is already scheduled. The slot is unavailable for reservation.</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color-dot dot-yellow"></div>
+                    <div class="legend-text">
+                        <strong>Partially Booked / Under Review</strong>
+                        <span>The account is reserved for specific hours. Other time slots on this day remain open and available for booking.</span>
+                    </div>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color-dot dot-green"></div>
+                    <div class="legend-text">
+                        <strong>Available / Open Slot</strong>
+                        <span>The account is vacant on this day. You may freely submit a booking request via the form.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="footer-credits">
+                Developed by <strong>RONALD WILLIAM D. GERON</strong> | © 2026 All Rights Reserved
+            </div>
+            <div class="footer-meta">
+                <span class="status-badge"><span class="status-dot"></span> System Live</span>
+                <span>v2.1.0</span>
+            </div>
+        </div>
+    </footer>
 
     <div id="sheet-modal" class="modal">
         <div class="modal-content">
@@ -318,4 +573,3 @@
     </script>
 </body>
 </html>
-
