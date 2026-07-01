@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoom Account Monitoring System</title>
+    <title>Zoom Account Monitoring System v3</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
+
     <style>
         * {
             margin: 0;
@@ -33,10 +37,9 @@
             min-height: 100vh;
         }
 
-        /* ============ BALANSE AT PROFESSIONAL HEADER ============ */
         .main-header {
             background-color: var(--card-bg);
-            border-top: 4px solid var(--primary-color); /* Premium brand colored line edge */
+            border-top: 4px solid var(--primary-color);
             border-bottom: 1px solid var(--border-color);
             padding: 0.8rem 2rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -63,9 +66,8 @@
             object-fit: contain;
         }
 
-        /* DICT LOGO INTEGRATED PROFILE */
         .right-header-section .dict-logo {
-            height: 125px; /* Optimized premium profile pairing */
+            height: 125px;
             width: auto;
             object-fit: contain;
             transition: transform 0.2s ease;
@@ -88,7 +90,6 @@
             margin-top: 1px;
         }
 
-        /* ============ MAIN WRAPPER ============ */
         .container {
             flex: 1;
             width: 100%;
@@ -97,7 +98,6 @@
             padding: 2.5rem 2rem;
         }
 
-        /* ============ PREMIUM HERO/FORM SECTION ============ */
         .form-section {
             background: linear-gradient(135deg, rgba(14, 113, 235, 0.04) 0%, rgba(99, 102, 241, 0.02) 100%);
             border: 1px solid rgba(14, 113, 235, 0.12);
@@ -142,7 +142,6 @@
             box-shadow: 0 6px 14px rgba(14, 113, 235, 0.25);
         }
 
-        /* ============ MODERN CARDS GRID ============ */
         .capacity-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -177,7 +176,6 @@
             margin-bottom: 16px;
         }
 
-        /* PREMIUM TINTED FRAME BACKGROUND FOR ICON EMOJIS */
         .capacity-icon {
             font-size: 18px;
             width: 44px;
@@ -188,20 +186,9 @@
             border-radius: 50%;
         }
 
-        .icon-100 {
-            background-color: rgba(14, 113, 235, 0.08);
-            color: var(--primary-color);
-        }
-
-        .icon-300 {
-            background-color: rgba(99, 102, 241, 0.08);
-            color: var(--secondary-color);
-        }
-
-        .icon-500 {
-            background-color: rgba(16, 185, 129, 0.08);
-            color: var(--accent-green);
-        }
+        .icon-100 { background-color: rgba(14, 113, 235, 0.08); color: var(--primary-color); }
+        .icon-300 { background-color: rgba(99, 102, 241, 0.08); color: var(--secondary-color); }
+        .icon-500 { background-color: rgba(16, 185, 129, 0.08); color: var(--accent-green); }
 
         .capacity-card h2 {
             font-size: 20px;
@@ -216,7 +203,6 @@
             margin: 4px 0 24px 0;
         }
 
-        /* ENHANCED INTERACTIVE CTA ACTION BUTTONS */
         .btn {
             width: 100%;
             padding: 13px 16px;
@@ -237,7 +223,6 @@
             box-shadow: 0 4px 12px rgba(14, 113, 235, 0.2);
         }
 
-        /* ============ LEGEND BOX DESIGN ============ */
         .legend-section {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -257,7 +242,6 @@
             gap: 6px;
         }
 
-        /* BALANCED EQUAL COLS FOR SCANNABILITY */
         .legend-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -265,46 +249,12 @@
             width: 100%;
         }
 
-        .legend-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
+        .legend-item { display: flex; align-items: flex-start; gap: 10px; }
+        .legend-color-dot { width: 14px; height: 14px; border-radius: 4px; margin-top: 4px; flex-shrink: 0; }
 
-        .legend-color-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 4px;
-            margin-top: 4px;
-            flex-shrink: 0;
-        }
+        .legend-text strong { display: block; font-size: 13.5px; color: var(--text-primary); font-weight: 600; }
+        .legend-text span { font-size: 12px; color: var(--text-secondary); }
 
-        .dot-pink { 
-            background-color: #f4cccc; 
-            border: 1px solid #e06666;
-        }
-        .dot-yellow { 
-            background-color: #ffe599; 
-            border: 1px solid #f1c232;
-        }
-        .dot-green { 
-            background-color: #d9ead3; 
-            border: 1px solid #93c47d;
-        }
-
-        .legend-text strong {
-            display: block;
-            font-size: 13.5px;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .legend-text span {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* ============ PERSONALIZED ENTERPRISE FOOTER ============ */
         .main-footer {
             background-color: var(--card-bg);
             border-top: 1px solid var(--border-color);
@@ -324,16 +274,8 @@
             gap: 12px;
         }
 
-        .footer-credits strong {
-            color: var(--text-primary);
-        }
-
-        .footer-meta {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
+        .footer-credits strong { color: var(--text-primary); }
+        .footer-meta { display: flex; align-items: center; gap: 16px; }
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -345,42 +287,28 @@
             font-weight: 500;
             font-size: 12px;
         }
+        .status-dot { width: 6px; height: 6px; background-color: var(--accent-green); border-radius: 50%; }
 
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background-color: var(--accent-green);
-            border-radius: 50%;
-        }
-
-        /* ============ WALANG GALAWAN: IFRAME MODAL STRUCTURE ============ */
         .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.55);
             z-index: 1000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal.active {
-            display: flex;
+            align-items: center; justify-content: center;
         }
 
         .modal-content {
             background: var(--card-bg);
-            border-radius: 12px;
+            border-radius: 16px;
             width: 95%;
-            max-width: 1200px;
-            height: 100vh;
+            max-width: 1100px;
+            max-height: 90vh;
             display: flex;
             flex-direction: column;
-            padding: 0.8rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+            overflow-y: auto;
         }
 
         .modal-header {
@@ -388,51 +316,40 @@
             align-items: center;
             justify-content: space-between;
             padding-bottom: 1rem;
-            border-bottom: 0.5px solid var(--border-color);
-            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.2rem;
         }
 
         .close-btn {
-            background: #f5f5f5;
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: background 0.2s;
-        }
-
-        .close-btn:hover {
-            background: #e0e0e0;
-        }
-
-        .iframe-container {
-            flex: 1;
-            width: 100%;
+            background: #f1f5f9;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            overflow: hidden;
-            background: #fff;
-            position: relative;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .close-btn:hover { background: #e2e8f0; }
+
+        #calendar-container {
+            flex: 1;
+            width: 100%;
+            background: #ffffff;
+            font-size: 14px;
         }
 
-        #sheet-iframe {
-            width: 133.33%;
-            height: 133.33%;
-            transform: scale(0.75);
-            transform-origin: top left;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+        .fc .fc-button-primary { background-color: var(--primary-color); border-color: transparent; }
+        .fc .fc-button-primary:hover { background-color: #0b59ba; }
+        .fc .fc-button-primary:disabled { background-color: #94a3b8; }
+        
+        .fc-event-title {
+            white-space: normal !important;
+            font-size: 11.5px !important;
+            padding: 2px;
         }
 
-        /* Responsive Breakpoint for Mobile Screens */
         @media (max-width: 768px) {
-            .legend-grid {
-                grid-template-columns: 1fr;
-                gap: 16px;
-            }
+            .legend-grid { grid-template-columns: 1fr; gap: 16px; }
         }
     </style>
 </head>
@@ -447,7 +364,6 @@
                     <p class="subtitle">Track and schedule video conference capacity across your organization</p>
                 </div>
             </div>
-            
             <div class="right-header-section">
                 <img src="DICT.jpg" alt="DICT Logo" class="dict-logo">
             </div>
@@ -464,7 +380,7 @@
         </div>
 
         <section class="capacity-grid">
-            <div class="capacity-card" onclick="openSheetModal('100pax')">
+            <div class="capacity-card" onclick="openSchedule('100 PAX')">
                 <div>
                     <div class="capacity-card-header">
                         <div class="capacity-icon icon-100">👥</div>
@@ -475,7 +391,7 @@
                 <button class="btn">View Schedule</button>
             </div>
 
-            <div class="capacity-card" onclick="openSheetModal('300pax')">
+            <div class="capacity-card" onclick="openSchedule('300 PAX')">
                 <div>
                     <div class="capacity-card-header">
                         <div class="capacity-icon icon-300">👥👥</div>
@@ -486,7 +402,7 @@
                 <button class="btn">View Schedule</button>
             </div>
 
-            <div class="capacity-card" onclick="openSheetModal('500pax')">
+            <div class="capacity-card" onclick="openSchedule('500 PAX')">
                 <div>
                     <div class="capacity-card-header">
                         <div class="capacity-icon icon-500">🏢</div>
@@ -502,21 +418,21 @@
             <div class="legend-title">💡 Calendar Color Legend Guide</div>
             <div class="legend-grid">
                 <div class="legend-item">
-                    <div class="legend-color-dot dot-pink"></div>
+                    <div class="legend-color-dot" style="background-color: #fee2e2; border: 1px solid #fca5a5;"></div>
                     <div class="legend-text">
                         <strong>Fully Booked / Reserved</strong>
                         <span>A meeting or event is already scheduled. The slot is unavailable for reservation.</span>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color-dot dot-yellow"></div>
+                    <div class="legend-color-dot" style="background-color: #fef3c7; border: 1px solid #fde68a;"></div>
                     <div class="legend-text">
                         <strong>Partially Booked</strong>
                         <span>The account is reserved for specific hours. Other time slots on this day remain open and available for booking.</span>
                     </div>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color-dot dot-green"></div>
+                    <div class="legend-color-dot" style="background-color: #dcfce7; border: 1px solid #bbf7d0;"></div>
                     <div class="legend-text">
                         <strong>Available / Open Slot</strong>
                         <span>The account is vacant on this day. You may freely submit a booking request via the form.</span>
@@ -533,51 +449,174 @@
             </div>
             <div class="footer-meta">
                 <span class="status-badge"><span class="status-dot"></span> System Live</span>
-                <span>v2.1.0</span>
+                <span>v3.0.0</span>
             </div>
         </div>
     </footer>
 
-    <div id="sheet-modal" class="modal">
+    <div id="calendarModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="modal-title">Live Spreadsheet View</h2>
-                <button class="close-btn" onclick="closeSheetModal()">Close ✕</button>
+                <h2>Live Schedule View - <span id="modalPaxTitle">100 PAX</span></h2>
+                <button class="close-btn" onclick="closeModal()">Close ✕</button>
             </div>
-            <div class="iframe-container">
-                <iframe id="sheet-iframe" src="" allowfullscreen></iframe>
-            </div>
+            <div id="calendar-container"></div>
         </div>
     </div>
 
     <script>
-        const SHEET_LINKS = {
-            '100pax': 'https://docs.google.com/spreadsheets/d/1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M/htmlembed?gid=153213763&widget=false&chrome=false',
-            '300pax': 'https://docs.google.com/spreadsheets/d/1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M/htmlembed?gid=901445594&widget=false&chrome=false',
-            '500pax': 'https://docs.google.com/spreadsheets/d/1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M/htmlembed?gid=1523031348&widget=false&chrome=false'
-        };
+        let calendarInstance = null;
 
-        function openSheetModal(capacity) {
-            const modal = document.getElementById('sheet-modal');
-            const iframe = document.getElementById('sheet-iframe');
-            const title = document.getElementById('modal-title');
+        function openSchedule(paxType) {
+            const modal = document.getElementById('calendarModal');
+            document.getElementById('modalPaxTitle').innerText = paxType;
+            modal.style.display = 'flex';
 
-            title.textContent = `📅 Live Schedule View - ${capacity.toUpperCase()}`;
-            iframe.src = SHEET_LINKS[capacity];
-            modal.classList.add('active');
+            // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
+            const scriptURL = "https://script.google.com/macros/s/AKfycbydEQlGH6zU7Duf-n1btgtdTfshK5Cf4RHg-OC9JepkLFeAWvfbklnxCSF2gCgsaZOy/exec";
+
+            fetch(scriptURL)
+                .then(response => response.json())
+                .then(allEvents => {
+                    
+                    // Safely filter elements with trimmed spacing matches
+                    const filteredEvents = allEvents.filter(event => {
+                        return event.zoomAccount && event.zoomAccount.toUpperCase() === paxType.trim().toUpperCase();
+                    });
+                    
+                    const calendarEl = document.getElementById('calendar-container');
+                    
+                    if (calendarInstance) {
+                        calendarInstance.destroy();
+                    }
+                    
+                    calendarInstance = new FullCalendar.Calendar(calendarEl, {
+                        initialView: 'dayGridMonth',
+                        initialDate: '2026-07-01', 
+                        headerToolbar: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                        },
+                        events: filteredEvents, 
+                        timeZone: 'local'
+                    });
+                    
+                    calendarInstance.render();
+                })
+                .catch(error => {
+                    console.error("Error fetching sheet rows database:", error);
+                    alert("Hindi ma-access ang Live Database.");
+                });
         }
 
-        function closeSheetModal() {
-            const modal = document.getElementById('sheet-modal');
-            const iframe = document.getElementById('sheet-iframe');
-
-            modal.classList.remove('active');
-            iframe.src = "";
+        function closeModal() {
+            document.getElementById('calendarModal').style.display = 'none';
         }
 
-        document.getElementById('sheet-modal').addEventListener('click', function (e) {
-            if (e.target === this) closeSheetModal();
+        document.getElementById('calendarModal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
         });
     </script>
 </body>
 </html>
+/*  
+function doGet() {
+  // 1. Open the active spreadsheet and grab the responses tab
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("Form Responses 1"); // Matches your tab name exactly
+  
+  if (!sheet) {
+    return ContentService.createTextOutput(JSON.stringify({ error: "Sheet tab 'Form Responses 1' not found." }))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // 2. Fetch all data rows starting from row 5 (where your first data row is)
+  const startRow = 5;
+  const lastRow = sheet.getLastRow();
+  
+  // If the sheet is empty or only has headers, return an empty list
+  if (lastRow < startRow) {
+    return ContentService.createTextOutput(JSON.stringify([]))
+                         .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // Read columns A to K (11 columns wide)
+  const dataRange = sheet.getRange(startRow, 1, (lastRow - startRow + 1), 11);
+  const displayValues = dataRange.getDisplayValues(); // Gets formatted text strings (e.g., "7:00:00 AM")
+
+  const events = [];
+
+  // Helper function to format Google Sheet values into valid ISO strings for FullCalendar
+  function formatISOString(dateStr, timeStr) {
+    if (!dateStr || !timeStr) return null;
+    try {
+      // Create a clean date format out of "6/30/2026" or "7/1/2026"
+      const dateParts = dateStr.split('/');
+      if (dateParts.length !== 3) return null;
+      
+      const month = dateParts[0].padStart(2, '0');
+      const day = dateParts[1].padStart(2, '0');
+      const year = dateParts[2];
+      
+      // Parse out the "7:00:00 AM" or "10:00:00 AM" text format safely
+      const match = timeStr.match(/^(\d+):(\d+):(\d+)\s*(AM|PM)?$/i);
+      if (!match) return `${year}-${month}-${day}T${timeStr}`; // Fallback if format differs
+
+      let hours = parseInt(match[1], 10);
+      const minutes = match[2].padStart(2, '0');
+      const seconds = match[3].padStart(2, '0');
+      const ampm = match[4] ? match[4].toUpperCase() : null;
+
+      if (ampm === "PM" && hours < 12) hours += 12;
+      if (ampm === "AM" && hours === 12) hours = 0;
+
+      const hoursStr = String(hours).padStart(2, '0');
+      return `${year}-${month}-${day}T${hoursStr}:${minutes}:${seconds}`;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // 3. Process every single row inside your sheet database array
+  for (let i = 0; i < displayValues.length; i++) {
+    const row = displayValues[i];
+
+    // Column Mapping Based on your Screenshot layouts:
+    // A=0: Timestamp, B=1: Requester, C=2: Department, D=3: Title, E=4: Type, F=5: Pref Date, G=6: Start, H=7: End, I=8: Freq, J=9: Zoom Account, K=10: Status
+    const title = row[3];        // COLUMN D: MEETING TITLE
+    const prefDate = row[5];     // COLUMN F: PREFERRED DATE
+    const startTime = row[6];    // COLUMN G: START TIME
+    const endTime = row[7];      // COLUMN H: END TIME
+    const zoomAccount = row[9];  // COLUMN J: ZOOM ACCOUNT (e.g., "100 PAX")
+    const status = row[10];      // COLUMN K: STATUS (e.g., "APPROVED")
+
+    // Ignore rows that don't have titles, or slots that aren't approved yet
+    if (!title || status.toUpperCase() !== "APPROVED") {
+      continue;
+    }
+
+    // Convert separate Date and Time columns into ISO strings
+    const startISO = formatISOString(prefDate, startTime);
+    const endISO = formatISOString(prefDate, endTime);
+
+    if (startISO && endISO) {
+      events.push({
+        title: title,
+        start: startISO,
+        end: endISO,
+        zoomAccount: zoomAccount.trim(), // Matches paxType filtering: "100 PAX", "300 PAX"
+        allDay: false,
+        // Color Legend styling assignments based on status parameters
+        backgroundColor: '#fee2e2', // Light Red background color
+        borderColor: '#fca5a5',     // Red borders
+        textColor: '#991b1b'        // Dark Red text
+      });
+    }
+  }
+
+  // 4. Return clean text output JSON directly to the browser
+  return ContentService.createTextOutput(JSON.stringify(events))
+                       .setMimeType(ContentService.MimeType.JSON);
+}
+*/
