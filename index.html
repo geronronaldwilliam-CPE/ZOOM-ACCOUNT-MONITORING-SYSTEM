@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoom Account Monitoring System v3</title>
-    
+    <title>Zoom Account Monitoring System</title>
+
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
 
@@ -24,7 +25,6 @@
             --border-color: #e2e8f0;
             --text-primary: #0f172a;
             --text-secondary: #64748b;
-            --text-muted: #94a3b8;
         }
 
         body {
@@ -46,7 +46,7 @@
         }
 
         .header-container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -63,450 +63,762 @@
         .system-logo {
             height: 44px;
             width: auto;
-            object-fit: contain;
-        }
-
-        .right-header-section .dict-logo {
-            height: 125px;
-            width: auto;
-            object-fit: contain;
-            transition: transform 0.2s ease;
-        }
-
-        .right-header-section .dict-logo:hover {
-            transform: scale(1.05);
         }
 
         .brand-text h1 {
             font-size: 21px;
             font-weight: 700;
-            letter-spacing: -0.02em;
             color: var(--text-primary);
         }
 
         .brand-text .subtitle {
             font-size: 12.5px;
             color: var(--text-secondary);
-            margin-top: 1px;
         }
 
         .container {
             flex: 1;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 2.5rem 2rem;
-        }
-
-        .form-section {
-            background: linear-gradient(135deg, rgba(14, 113, 235, 0.04) 0%, rgba(99, 102, 241, 0.02) 100%);
-            border: 1px solid rgba(14, 113, 235, 0.12);
-            border-radius: 16px;
-            padding: 2.25rem;
-            margin-bottom: 2.5rem;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(14, 113, 235, 0.02);
-        }
-
-        .form-section h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 6px;
-            color: var(--text-primary);
-        }
-
-        .form-section p {
-            font-size: 14px;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-        }
-
-        .form-link-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--primary-color);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 10px rgba(14, 113, 235, 0.15);
-        }
-
-        .form-link-btn:hover {
-            background: #0b59ba;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 14px rgba(14, 113, 235, 0.25);
+            padding: 2rem;
         }
 
         .capacity-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 24px;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .capacity-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 18px;
-            padding: 2rem;
+            border-radius: 14px;
+            padding: 1.5rem;
             cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.01), 0 1px 2px rgba(0, 0, 0, 0.01);
+            transition: all 0.25s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
         .capacity-card:hover {
-            border-color: transparent;
-            outline: 1px solid rgba(14, 113, 235, 0.2);
-            box-shadow: 0 12px 25px -5px rgba(14, 113, 235, 0.08), 0 8px 10px -6px rgba(14, 113, 235, 0.04);
-            transform: translateY(-4px);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+            border-color: var(--primary-color);
         }
-
-        .capacity-card-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .capacity-icon {
-            font-size: 18px;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-        }
-
-        .icon-100 { background-color: rgba(14, 113, 235, 0.08); color: var(--primary-color); }
-        .icon-300 { background-color: rgba(99, 102, 241, 0.08); color: var(--secondary-color); }
-        .icon-500 { background-color: rgba(16, 185, 129, 0.08); color: var(--accent-green); }
 
         .capacity-card h2 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 700;
-            color: var(--text-primary);
-            letter-spacing: -0.01em;
-        }
-
-        .capacity-desc {
-            font-size: 13.5px;
-            color: var(--text-secondary);
-            margin: 4px 0 24px 0;
         }
 
         .btn {
             width: 100%;
-            padding: 13px 16px;
+            padding: 10px;
             background: #f8fafc;
             color: var(--primary-color);
             border: 1px solid rgba(14, 113, 235, 0.15);
-            border-radius: 10px;
-            font-size: 14px;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            margin-top: 15px;
         }
 
         .capacity-card:hover .btn {
-            background: var(--primary-color) !important;
-            color: white !important;
-            border-color: transparent;
-            box-shadow: 0 4px 12px rgba(14, 113, 235, 0.2);
+            background: var(--primary-color);
+            color: white;
         }
 
         .legend-section {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 1.5rem;
+            border-radius: 12px;
+            padding: 1.25rem;
             margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01);
-        }
-
-        .legend-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
         }
 
         .legend-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            width: 100%;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
         }
 
-        .legend-item { display: flex; align-items: flex-start; gap: 10px; }
-        .legend-color-dot { width: 14px; height: 14px; border-radius: 4px; margin-top: 4px; flex-shrink: 0; }
-
-        .legend-text strong { display: block; font-size: 13.5px; color: var(--text-primary); font-weight: 600; }
-        .legend-text span { font-size: 12px; color: var(--text-secondary); }
-
-        .main-footer {
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            padding: 1.5rem 2rem;
-            margin-top: auto;
-        }
-
-        .footer-container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .legend-item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 13px;
-            color: var(--text-secondary);
-            flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
         }
 
-        .footer-credits strong { color: var(--text-primary); }
-        .footer-meta { display: flex; align-items: center; gap: 16px; }
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            background-color: rgba(16, 185, 129, 0.08);
-            color: #065f46;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-weight: 500;
-            font-size: 12px;
+        .legend-color-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
-        .status-dot { width: 6px; height: 6px; background-color: var(--accent-green); border-radius: 50%; }
 
         .modal {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.55);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
             z-index: 1000;
-            align-items: center; justify-content: center;
+            align-items: center;
+            justify-content: center;
         }
 
         .modal-content {
             background: var(--card-bg);
             border-radius: 16px;
             width: 95%;
-            max-width: 1100px;
-            max-height: 90vh;
+            max-width: 1200px;
+            height: 85vh;
             display: flex;
             flex-direction: column;
             padding: 1.5rem;
-            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         .modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 1rem;
+            padding-bottom: 0.75rem;
             border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1.2rem;
         }
 
         .close-btn {
             background: #f1f5f9;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
             cursor: pointer;
             font-weight: 600;
-            transition: all 0.2s;
         }
-        .close-btn:hover { background: #e2e8f0; }
 
-        #calendar-container {
+        .modal-body {
+            display: flex;
             flex: 1;
-            width: 100%;
-            background: #ffffff;
+            gap: 20px;
+            overflow: hidden;
+            padding-top: 15px;
+        }
+
+        .calendar-side {
+            flex: 1.3;
+            overflow-y: auto;
+        }
+
+        .details-side {
+            flex: 1;
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
             font-size: 14px;
+            width: 100%;
         }
 
-        .fc .fc-button-primary { background-color: var(--primary-color); border-color: transparent; }
-        .fc .fc-button-primary:hover { background-color: #0b59ba; }
-        .fc .fc-button-primary:disabled { background-color: #94a3b8; }
-        
-        .fc-event-title {
-            white-space: normal !important;
-            font-size: 11.5px !important;
-            padding: 2px;
+        .submit-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
         }
 
-        @media (max-width: 768px) {
-            .legend-grid { grid-template-columns: 1fr; gap: 16px; }
+        .submit-btn:hover {
+            background: #059669;
+        }
+
+        .meeting-list-item {
+            background: white;
+            padding: 10px;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            font-size: 13px;
+        }
+
+        .fc-daygrid-event {
+            background: transparent !important;
+            border: none !important;
+            justify-content: center;
+        }
+
+        .error-banner {
+            background: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 13px;
         }
     </style>
 </head>
+
 <body>
 
     <header class="main-header">
         <div class="header-container">
             <div class="left-header-section">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg" alt="Zoom Logo" class="system-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg"
+                    alt="Zoom Logo" class="system-logo">
                 <div class="brand-text">
-                    <h1>Account Monitoring System</h1>
-                    <p class="subtitle">Track and schedule video conference capacity across your organization</p>
+                    <h1>Zoom Account Portal</h1>
+                    <p class="subtitle">Direct Interactive Booking and Capacity Monitoring Engine</p>
                 </div>
-            </div>
-            <div class="right-header-section">
-                <img src="DICT.jpg" alt="DICT Logo" class="dict-logo">
             </div>
         </div>
     </header>
 
     <div class="container">
-        <div class="form-section">
-            <h3>📝 Request & Add New Event</h3>
-            <p>Click below to open and submit your meeting schedule details instantly via Google Form.</p>
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSd9Udz_53b3zpiy0gXr2XqPlvm-MqjQ7LeuXsJs7RgOvpgmkw/viewform" target="_blank" class="form-link-btn">
-                <span>Open Google Form</span> ➜
-            </a>
-        </div>
-
         <section class="capacity-grid">
             <div class="capacity-card" onclick="openSchedule('100 PAX')">
-                <div>
-                    <div class="capacity-card-header">
-                        <div class="capacity-icon icon-100">👥</div>
-                        <h2>100 PAX</h2>
-                    </div>
-                    <p class="capacity-desc">Standard capacity layout perfect for teams syncs and standard meetings.</p>
-                </div>
-                <button class="btn">View Schedule</button>
+                <h2>100 PAX Account</h2>
+                <p style="font-size:13px; color:var(--text-secondary);">Manage and book the standard team synchronization room.</p>
+                <button class="btn">View & Book</button>
             </div>
-
             <div class="capacity-card" onclick="openSchedule('300 PAX')">
-                <div>
-                    <div class="capacity-card-header">
-                        <div class="capacity-icon icon-300">👥👥</div>
-                        <h2>300 PAX</h2>
-                    </div>
-                    <p class="capacity-desc">Medium capacity option designed for larger webinar hostings and trainings.</p>
-                </div>
-                <button class="btn">View Schedule</button>
+                <h2>300 PAX Account</h2>
+                <p style="font-size:13px; color:var(--text-secondary);">Manage larger online workshops, webinars, and conferences.</p>
+                <button class="btn">View & Book</button>
             </div>
-
             <div class="capacity-card" onclick="openSchedule('500 PAX')">
-                <div>
-                    <div class="capacity-card-header">
-                        <div class="capacity-icon icon-500">🏢</div>
-                        <h2>500 PAX</h2>
-                    </div>
-                    <p class="capacity-desc">Enterprise-scale room ideal for major company assemblies and forums.</p>
-                </div>
-                <button class="btn">View Schedule</button>
+                <h2>500 PAX Account</h2>
+                <p style="font-size:13px; color:var(--text-secondary);">Book the enterprise auditorium for large-scale corporate broadcasts.</p>
+                <button class="btn">View & Book</button>
             </div>
         </section>
 
         <div class="legend-section">
-            <div class="legend-title">💡 Calendar Color Legend Guide</div>
             <div class="legend-grid">
                 <div class="legend-item">
-                    <div class="legend-color-dot" style="background-color: #fee2e2; border: 1px solid #fca5a5;"></div>
-                    <div class="legend-text">
-                        <strong>Fully Booked / Reserved</strong>
-                        <span>A meeting or event is already scheduled. The slot is unavailable for reservation.</span>
-                    </div>
+                    <div class="legend-color-dot" style="background:#10b981;"></div><span> Available / Open Slot</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color-dot" style="background-color: #fef3c7; border: 1px solid #fde68a;"></div>
-                    <div class="legend-text">
-                        <strong>Partially Booked</strong>
-                        <span>The account is reserved for specific hours. Other time slots on this day remain open and available for booking.</span>
-                    </div>
+                    <div class="legend-color-dot" style="background:#f59e0b;"></div><span> Partially Booked</span>
                 </div>
                 <div class="legend-item">
-                    <div class="legend-color-dot" style="background-color: #dcfce7; border: 1px solid #bbf7d0;"></div>
-                    <div class="legend-text">
-                        <strong>Available / Open Slot</strong>
-                        <span>The account is vacant on this day. You may freely submit a booking request via the form.</span>
-                    </div>
+                    <div class="legend-color-dot" style="background:#ef4444;"></div><span> Fully Booked</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color-dot" style="background:#0E71EB;"></div><span> Recurring Series Meeting</span>
                 </div>
             </div>
         </div>
     </div>
-
-    <footer class="main-footer">
-        <div class="footer-container">
-            <div class="footer-credits">
-                Developed by <strong>RONALD WILLIAM D. GERON</strong> | © 2026 All Rights Reserved
-            </div>
-            <div class="footer-meta">
-                <span class="status-badge"><span class="status-dot"></span> System Live</span>
-                <span>v3.0.0</span>
-            </div>
-        </div>
-    </footer>
 
     <div id="calendarModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Live Schedule View - <span id="modalPaxTitle">100 PAX</span></h2>
+                <h2>Schedule Dashboard: <span id="modalPaxTitle">100 PAX</span></h2>
                 <button class="close-btn" onclick="closeModal()">Close ✕</button>
             </div>
-            <div id="calendar-container"></div>
+            <div class="modal-body">
+                <div class="calendar-side">
+                    <div id="calendar-container"></div>
+                </div>
+                <div class="details-side" id="detailsPanel">
+                    <h3>Loading calendar...</h3>
+                    <p style="color:var(--text-secondary); font-size:13px;">Please wait while we fetch your schedule data.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        let calendarInstance = null;
+        // Your Google Sheet ID - make sure sheet is publicly accessible
+        const SHEET_ID = "1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M";
+        const SHEET_GID = "893972695"; // Form Responses 1 sheet ID
+        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydEQlGH6zU7Duf-n1btgtdTfshK5Cf4RHg-OC9JepkLFeAWvfbklnxCSF2gCgsaZOy/exec";
 
-        function openSchedule(paxType) {
+        let calendarInstance = null;
+        let currentPaxType = "";
+        let selectedDateStr = "";
+        let processedCalendarEvents = [];
+        let allRawMeetings = [];
+
+        function formatToSheetTime(timeStr) {
+            if (!timeStr) return "";
+            const parts = timeStr.split(':');
+            let hours = parseInt(parts[0], 10);
+            const minutes = parts[1].padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            return `${hours}:${minutes}:00 ${ampm}`;
+        }
+
+        function timeToMinutes(tStr) {
+            if (!tStr) return 0;
+            const cleanStr = tStr.trim().replace(/\s+/g, ' ');
+            const match = cleanStr.match(/^(\d+):(\d+)(?::(\d+))?\s*(AM|PM)?$/i);
+            if (!match) return 0;
+            let hrs = parseInt(match[1], 10);
+            let mins = parseInt(match[2], 10);
+            const ampm = match[4] ? match[4].toUpperCase() : null;
+            if (ampm === "PM" && hrs < 12) hrs += 12;
+            if (ampm === "AM" && hrs === 12) hrs = 0;
+            return (hrs * 60) + mins;
+        }
+
+        function parseISODate(dateStr) {
+            const parts = dateStr.split('-');
+            return new Date(parts[0], parts[1] - 1, parts[2]);
+        }
+
+        function formatDateToISO(dateObj) {
+            const y = dateObj.getFullYear();
+            const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+            const d = String(dateObj.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function parseDate(dateStr) {
+            if (!dateStr) return null;
+            const d = new Date(dateStr);
+            if (isNaN(d.getTime())) return null;
+            return d;
+        }
+
+        function projectRecurringEvents(rawMeetings, paxType) {
+            const tempDaysMap = {};
+            const endProjectionLimit = new Date(2026, 11, 31);
+
+            const relevantMeetings = rawMeetings.filter(m => {
+                return m.zoomAccount && m.zoomAccount.trim() === paxType;
+            });
+            console.log(`📊 For ${paxType}: ${relevantMeetings.length} meetings found`);
+
+            relevantMeetings.forEach(meeting => {
+                let currentTrackDate = parseISODate(meeting.originalDate);
+                const freq = meeting.frequency ? meeting.frequency.toUpperCase().trim() : "NOT";
+
+                if (freq === "NOT" || freq === "NO (ONE-TIME SLOT)") {
+                    const isoStr = formatDateToISO(currentTrackDate);
+                    if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
+                    tempDaysMap[isoStr].push(meeting);
+                } 
+                else if (freq === "WEEKLY" || freq === "WEEKLY SERIES") {
+                    while (currentTrackDate <= endProjectionLimit) {
+                        const isoStr = formatDateToISO(currentTrackDate);
+                        if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
+                        if (!tempDaysMap[isoStr].some(m => m.title === meeting.title && m.start === meeting.start)) {
+                            tempDaysMap[isoStr].push(meeting);
+                        }
+                        currentTrackDate.setDate(currentTrackDate.getDate() + 7);
+                    }
+                } 
+                else if (freq === "MONTHLY" || freq === "MONTHLY SERIES") {
+                    while (currentTrackDate <= endProjectionLimit) {
+                        const isoStr = formatDateToISO(currentTrackDate);
+                        if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
+                        if (!tempDaysMap[isoStr].some(m => m.title === meeting.title && m.start === meeting.start)) {
+                            tempDaysMap[isoStr].push(meeting);
+                        }
+                        currentTrackDate.setMonth(currentTrackDate.getMonth() + 1);
+                    }
+                }
+            });
+
+            const finalCalendarEvents = [];
+            for (const isoKey in tempDaysMap) {
+                const dayMeetings = tempDaysMap[isoKey];
+                const hasRecurring = dayMeetings.some(m => {
+                    const f = m.frequency ? m.frequency.toUpperCase().trim() : "NOT";
+                    return f !== "NOT" && f !== "NO (ONE-TIME SLOT)";
+                });
+                
+                let dotColor = "#10b981";
+                if (dayMeetings.length > 0) {
+                    if (hasRecurring) {
+                        dotColor = "#0E71EB";
+                    } else if (dayMeetings.length >= 4) {
+                        dotColor = "#ef4444";
+                    } else {
+                        dotColor = "#f59e0b";
+                    }
+                }
+
+                finalCalendarEvents.push({
+                    start: isoKey,
+                    title: "●", 
+                    color: "transparent",
+                    textColor: dotColor,
+                    extendedProps: {
+                        meetings: dayMeetings
+                    }
+                });
+            }
+            return finalCalendarEvents;
+        }
+
+        function parseCSV(csv) {
+            const lines = csv.trim().split('\n');
+            if (lines.length < 4) {
+                console.warn("❌ CSV has less than 4 rows");
+                return [];
+            }
+
+            const headers = [];
+            const csvLine = lines[3];
+            
+            // Parse CSV headers properly
+            let current = '';
+            let insideQuotes = false;
+            for (let j = 0; j < csvLine.length; j++) {
+                const char = csvLine[j];
+                if (char === '"') {
+                    insideQuotes = !insideQuotes;
+                } else if (char === ',' && !insideQuotes) {
+                    headers.push(current.trim().replace(/^"|"$/g, ''));
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            headers.push(current.trim().replace(/^"|"$/g, ''));
+
+            console.log("📋 Headers found:", headers);
+
+            const meetings = [];
+
+            for (let i = 4; i < lines.length; i++) {
+                const line = lines[i];
+                if (!line.trim()) continue;
+
+                const values = [];
+                let current = '';
+                let insideQuotes = false;
+
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        insideQuotes = !insideQuotes;
+                    } else if (char === ',' && !insideQuotes) {
+                        values.push(current.trim().replace(/^"|"$/g, ''));
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim().replace(/^"|"$/g, ''));
+
+                // Find column indices
+                const statusIdx = headers.indexOf("STATUS");
+                const dateIdx = headers.indexOf("PREFERRED DATE");
+                const zoomIdx = headers.indexOf("ZOOM ACCOUNT");
+                const titleIdx = headers.indexOf("MEETING TITLE");
+                const startIdx = headers.indexOf("START TIME");
+                const endIdx = headers.indexOf("END TIME");
+                const deptIdx = headers.indexOf("DEPARTMENT");
+                const reqIdx = headers.indexOf("REQUESTER NAME");
+                const typeIdx = headers.indexOf("MEETING TYPE");
+                
+                let freqIdx = -1;
+                for (let j = 0; j < headers.length; j++) {
+                    const h = headers[j].toLowerCase();
+                    if (h.includes("recurring") && h.includes("frequency")) {
+                        freqIdx = j;
+                        break;
+                    }
+                }
+
+                // Only process APPROVED rows
+                if (statusIdx === -1 || !values[statusIdx] || values[statusIdx].toUpperCase() !== "APPROVED") {
+                    continue;
+                }
+
+                const dateVal = values[dateIdx];
+                if (!dateVal) continue;
+
+                const dateObj = parseDate(dateVal);
+                if (!dateObj) continue;
+
+                const isoDate = formatDateToISO(dateObj);
+
+                const meeting = {
+                    title: titleIdx >= 0 ? (values[titleIdx] || "") : "",
+                    start: startIdx >= 0 ? (values[startIdx] || "") : "",
+                    end: endIdx >= 0 ? (values[endIdx] || "") : "",
+                    department: deptIdx >= 0 ? (values[deptIdx] || "") : "",
+                    requester: reqIdx >= 0 ? (values[reqIdx] || "") : "",
+                    type: typeIdx >= 0 ? (values[typeIdx] || "") : "",
+                    frequency: freqIdx >= 0 ? (values[freqIdx] || "NOT") : "NOT",
+                    originalDate: isoDate,
+                    zoomAccount: zoomIdx >= 0 ? (values[zoomIdx] || "") : ""
+                };
+
+                meetings.push(meeting);
+                console.log(`✅ Meeting added: ${meeting.title} on ${isoDate} for ${meeting.zoomAccount}`);
+            }
+
+            return meetings;
+        }
+
+        async function fetchSheetData() {
+            try {
+                console.log("🔄 Fetching from:", CSV_URL);
+                const response = await fetch(CSV_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const csv = await response.text();
+                console.log("✅ CSV received, length:", csv.length);
+                
+                const meetings = parseCSV(csv);
+                console.log(`✅ Total meetings parsed: ${meetings.length}`);
+                
+                return meetings;
+
+            } catch (error) {
+                console.error("❌ Error fetching sheet:", error);
+                alert("Error loading data:\n" + error.message + "\n\nMake sure your Google Sheet is publicly accessible (Share > Anyone with the link)");
+                return null;
+            }
+        }
+
+        async function openSchedule(paxType) {
+            currentPaxType = paxType;
             const modal = document.getElementById('calendarModal');
             document.getElementById('modalPaxTitle').innerText = paxType;
             modal.style.display = 'flex';
 
-            // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
-            const scriptURL = "https://script.google.com/macros/s/AKfycbydEQlGH6zU7Duf-n1btgtdTfshK5Cf4RHg-OC9JepkLFeAWvfbklnxCSF2gCgsaZOy/exec";
+            const detailsPanel = document.getElementById('detailsPanel');
+            detailsPanel.innerHTML = '<h3>Loading...</h3><p>Fetching sheet data...</p>';
 
-            fetch(scriptURL)
-                .then(response => response.json())
-                .then(allEvents => {
-                    
-                    // Safely filter elements with trimmed spacing matches
-                    const filteredEvents = allEvents.filter(event => {
-                        return event.zoomAccount && event.zoomAccount.toUpperCase() === paxType.trim().toUpperCase();
-                    });
-                    
-                    const calendarEl = document.getElementById('calendar-container');
-                    
-                    if (calendarInstance) {
-                        calendarInstance.destroy();
+            const meetings = await fetchSheetData();
+
+            if (!meetings) {
+                detailsPanel.innerHTML = `
+                    <div class="error-banner">❌ Failed to load data. Check console (F12) for details.</div>
+                    <h3>Troubleshooting:</h3>
+                    <ol style="font-size:13px; margin-left:20px;">
+                        <li>Make sure your Google Sheet is shared publicly</li>
+                        <li>Right-click sheet > "Share" > Select "Anyone with the link"</li>
+                        <li>Try refreshing the page</li>
+                    </ol>
+                `;
+                return;
+            }
+
+            if (meetings.length === 0) {
+                detailsPanel.innerHTML = `<h3>No Data</h3><p>No approved meetings found in the sheet yet.</p>`;
+                return;
+            }
+
+            allRawMeetings = meetings;
+            processedCalendarEvents = projectRecurringEvents(meetings, paxType);
+            console.log(`✅ Calendar events created for ${paxType}: ${processedCalendarEvents.length}`);
+
+            const calendarEl = document.getElementById('calendar-container');
+            if (calendarInstance) calendarInstance.destroy();
+
+            calendarInstance = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                initialDate: '2026-07-01',
+                headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+                events: processedCalendarEvents,
+                selectable: true,
+                dateClick: function (info) {
+                    handleDayInteraction(info.dateStr);
+                }
+            });
+            calendarInstance.render();
+
+            detailsPanel.innerHTML = `
+                <h3>Select a Day</h3>
+                <p style="color:var(--text-secondary); font-size:13px;">Click on any day to view bookings or create a new meeting.</p>
+            `;
+        }
+
+        function handleDayInteraction(dateStr) {
+            selectedDateStr = dateStr;
+            const panel = document.getElementById('detailsPanel');
+
+            const [y, m, d] = dateStr.split('-');
+            const sheetDateFormat = `${parseInt(m, 10)}/${parseInt(d, 10)}/${y}`;
+
+            const dayMatch = processedCalendarEvents.find(e => e.start === dateStr);
+            const existingMeetings = (dayMatch && dayMatch.extendedProps) ? dayMatch.extendedProps.meetings : [];
+
+            let html = `<h3>Agenda: ${dateStr}</h3>`;
+
+            if (existingMeetings.length === 0) {
+                html += `<p style="color:#10b981; font-size:13px; font-weight:600;">🟢 Account vacant all day. All hours open for bookings.</p>`;
+            } else {
+                existingMeetings.forEach(m => {
+                    const freq = m.frequency ? m.frequency.toUpperCase().trim() : "NOT";
+                    const isRecur = freq !== "NOT" && freq !== "NO (ONE-TIME SLOT)";
+                    html += `
+                    <div class="meeting-list-item" style="border-left-color: ${isRecur ? 'var(--secondary-color)' : 'var(--primary-color)'}">
+                        <strong>${m.title || 'Untitled'}</strong> ${isRecur ? '<span style="color:var(--primary-color); font-weight:bold;">(Recurring)</span>' : ''}<br>
+                        ⏰ ${m.start || 'N/A'} - ${m.end || 'N/A'}<br>
+                        <span style="font-size:11px; color:var(--text-secondary);">Dept: ${m.department || 'N/A'} | Req: ${m.requester || 'N/A'}</span>
+                    </div>`;
+                });
+            }
+
+            html += `
+            <hr style="border:none; border-top:1px solid var(--border-color); margin:15px 0;">
+            <h3>New Booking Request</h3>
+            <form id="systemBookingForm" onsubmit="handleFormSubmission(event, '${sheetDateFormat}', '${dateStr}')">
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label>Requester Name</label>
+                    <input type="text" id="formReqName" required>
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label>Department</label>
+                    <input type="text" id="formDept" required>
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label>Meeting Title</label>
+                    <input type="text" id="formTitle" required>
+                </div>
+                <div class="form-group" style="margin-bottom:10px;">
+                    <label>Meeting Type</label>
+                    <select id="formType">
+                        <option value="Internal Meeting">Internal Meeting</option>
+                        <option value="Client Meeting">Client Meeting</option>
+                        <option value="Training">Training</option>
+                        <option value="Webinar">Webinar</option>
+                    </select>
+                </div>
+                <div style="display:flex; gap:10px; margin-bottom:10px;">
+                    <div class="form-group" style="flex:1;">
+                        <label>Start Time</label>
+                        <input type="time" id="formStart" required>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label>End Time</label>
+                        <input type="time" id="formEnd" required>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom:15px;">
+                    <label>Is this a recurring meeting?</label>
+                    <select id="formFreq">
+                        <option value="NOT">No (One-Time Slot)</option>
+                        <option value="Weekly">Weekly Series</option>
+                        <option value="Monthly">Monthly Series</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Submit Booking Request</button>
+            </form>`;
+
+            panel.innerHTML = html;
+        }
+
+        function handleFormSubmission(event, sheetDateFormat, isoDateStr) {
+            event.preventDefault();
+
+            const startRaw = document.getElementById('formStart').value;
+            const endRaw = document.getElementById('formEnd').value;
+
+            const finalStartStr = formatToSheetTime(startRaw);
+            const finalEndStr = formatToSheetTime(endRaw);
+
+            const userStartMins = timeToMinutes(finalStartStr);
+            const userEndMins = timeToMinutes(finalEndStr);
+
+            if (userEndMins <= userStartMins) {
+                alert("Mali ang Oras: End Time must be later than Start Time.");
+                return;
+            }
+
+            const dayDataMatch = processedCalendarEvents.find(e => e.start === isoDateStr);
+            if (dayDataMatch && dayDataMatch.extendedProps && dayDataMatch.extendedProps.meetings) {
+                const dayMeetings = dayDataMatch.extendedProps.meetings;
+
+                for (let i = 0; i < dayMeetings.length; i++) {
+                    const existStart = timeToMinutes(dayMeetings[i].start);
+                    const existEnd = timeToMinutes(dayMeetings[i].end);
+
+                    if (userStartMins < existEnd && userEndMins > existStart) {
+                        alert(`❌ Booking Conflict!\n"${dayMeetings[i].title}" (${dayMeetings[i].start} - ${dayMeetings[i].end})\n\nPlease select a different time.`);
+                        return;
                     }
-                    
-                    calendarInstance = new FullCalendar.Calendar(calendarEl, {
-                        initialView: 'dayGridMonth',
-                        initialDate: '2026-07-01', 
-                        headerToolbar: {
-                            left: 'prev,next today',
-                            center: 'title',
-                            right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                        },
-                        events: filteredEvents, 
-                        timeZone: 'local'
-                    });
-                    
-                    calendarInstance.render();
+                }
+            }
+
+            const payload = {
+                requesterName: document.getElementById('formReqName').value,
+                department: document.getElementById('formDept').value,
+                meetingTitle: document.getElementById('formTitle').value,
+                meetingType: document.getElementById('formType').value,
+                preferredDate: sheetDateFormat,
+                startTime: finalStartStr,
+                endTime: finalEndStr,
+                frequency: document.getElementById('formFreq').value,
+                zoomAccount: currentPaxType
+            };
+
+            console.log("📤 Submitting payload:", payload);
+
+            const submitBtn = event.target.querySelector('.submit-btn');
+            submitBtn.innerText = "Processing...";
+            submitBtn.disabled = true;
+
+            fetch(GOOGLE_APPS_SCRIPT_URL, {
+                method: "POST",
+                body: JSON.stringify(payload),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(res => res.json())
+                .then(result => {
+                    console.log("✅ Response from Apps Script:", result);
+                    if (result.status === "success") {
+                        alert("🎉 Booking submitted successfully!\nStatus: PENDING (awaiting admin approval)");
+                        closeModal();
+                    } else {
+                        alert("Error: " + (result.message || "Unknown error"));
+                        submitBtn.innerText = "Submit Booking Request";
+                        submitBtn.disabled = false;
+                    }
                 })
-                .catch(error => {
-                    console.error("Error fetching sheet rows database:", error);
-                    alert("Hindi ma-access ang Live Database.");
+                .catch(err => {
+                    console.error("❌ Submission error:", err);
+                    alert("Network error. Check console for details.");
+                    submitBtn.innerText = "Submit Booking Request";
+                    submitBtn.disabled = false;
                 });
         }
 
@@ -519,104 +831,164 @@
         });
     </script>
 </body>
-</html>
-/*  
-function doGet() {
-  // 1. Open the active spreadsheet and grab the responses tab
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName("Form Responses 1"); // Matches your tab name exactly
-  
-  if (!sheet) {
-    return ContentService.createTextOutput(JSON.stringify({ error: "Sheet tab 'Form Responses 1' not found." }))
-                         .setMimeType(ContentService.MimeType.JSON);
-  }
 
-  // 2. Fetch all data rows starting from row 5 (where your first data row is)
-  const startRow = 5;
-  const lastRow = sheet.getLastRow();
-  
-  // If the sheet is empty or only has headers, return an empty list
-  if (lastRow < startRow) {
-    return ContentService.createTextOutput(JSON.stringify([]))
-                         .setMimeType(ContentService.MimeType.JSON);
-  }
 
-  // Read columns A to K (11 columns wide)
-  const dataRange = sheet.getRange(startRow, 1, (lastRow - startRow + 1), 11);
-  const displayValues = dataRange.getDisplayValues(); // Gets formatted text strings (e.g., "7:00:00 AM")
+// // ============================================
+// ZOOM ACCOUNT MONITORING - Google Apps Script
+// ============================================
 
-  const events = [];
-
-  // Helper function to format Google Sheet values into valid ISO strings for FullCalendar
-  function formatISOString(dateStr, timeStr) {
-    if (!dateStr || !timeStr) return null;
-    try {
-      // Create a clean date format out of "6/30/2026" or "7/1/2026"
-      const dateParts = dateStr.split('/');
-      if (dateParts.length !== 3) return null;
-      
-      const month = dateParts[0].padStart(2, '0');
-      const day = dateParts[1].padStart(2, '0');
-      const year = dateParts[2];
-      
-      // Parse out the "7:00:00 AM" or "10:00:00 AM" text format safely
-      const match = timeStr.match(/^(\d+):(\d+):(\d+)\s*(AM|PM)?$/i);
-      if (!match) return `${year}-${month}-${day}T${timeStr}`; // Fallback if format differs
-
-      let hours = parseInt(match[1], 10);
-      const minutes = match[2].padStart(2, '0');
-      const seconds = match[3].padStart(2, '0');
-      const ampm = match[4] ? match[4].toUpperCase() : null;
-
-      if (ampm === "PM" && hours < 12) hours += 12;
-      if (ampm === "AM" && hours === 12) hours = 0;
-
-      const hoursStr = String(hours).padStart(2, '0');
-      return `${year}-${month}-${day}T${hoursStr}:${minutes}:${seconds}`;
-    } catch (e) {
-      return null;
+function doGet(e) {
+  try {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName("Form Responses 1");
+    
+    if (!sheet) {
+      return createJsonResponse({error: "Sheet 'Form Responses 1' not found"});
     }
-  }
-
-  // 3. Process every single row inside your sheet database array
-  for (let i = 0; i < displayValues.length; i++) {
-    const row = displayValues[i];
-
-    // Column Mapping Based on your Screenshot layouts:
-    // A=0: Timestamp, B=1: Requester, C=2: Department, D=3: Title, E=4: Type, F=5: Pref Date, G=6: Start, H=7: End, I=8: Freq, J=9: Zoom Account, K=10: Status
-    const title = row[3];        // COLUMN D: MEETING TITLE
-    const prefDate = row[5];     // COLUMN F: PREFERRED DATE
-    const startTime = row[6];    // COLUMN G: START TIME
-    const endTime = row[7];      // COLUMN H: END TIME
-    const zoomAccount = row[9];  // COLUMN J: ZOOM ACCOUNT (e.g., "100 PAX")
-    const status = row[10];      // COLUMN K: STATUS (e.g., "APPROVED")
-
-    // Ignore rows that don't have titles, or slots that aren't approved yet
-    if (!title || status.toUpperCase() !== "APPROVED") {
-      continue;
+    
+    const allData = sheet.getDataRange().getValues();
+    
+    // Headers are in row 4 (index 3)
+    const headerRow = allData[3];
+    
+    // Create a map of header name to column index
+    const headerMap = {};
+    headerRow.forEach((header, index) => {
+      const cleanHeader = String(header || "").trim().toUpperCase();
+      headerMap[cleanHeader] = index;
+    });
+    
+    Logger.log("Header Map Keys:", Object.keys(headerMap));
+    
+    // Process data rows (starting from row 5, index 4)
+    const meetings = [];
+    
+    for (let i = 4; i < allData.length; i++) {
+      const row = allData[i];
+      
+      // Skip empty rows
+      if (!row || row.length === 0) continue;
+      if (row.every(cell => !cell || String(cell).trim() === "")) continue;
+      
+      // Check if STATUS is APPROVED
+      const statusIdx = headerMap["STATUS"];
+      if (statusIdx === undefined) continue;
+      
+      const status = String(row[statusIdx] || "").trim().toUpperCase();
+      if (status !== "APPROVED") continue;
+      
+      // Extract all required fields
+      const dateIdx = headerMap["PREFERRED DATE"];
+      const zoomIdx = headerMap["ZOOM ACCOUNT"];
+      const titleIdx = headerMap["MEETING TITLE"];
+      const startIdx = headerMap["START TIME"];
+      const endIdx = headerMap["END TIME"];
+      const deptIdx = headerMap["DEPARTMENT"];
+      const reqIdx = headerMap["REQUESTER NAME"];
+      const typeIdx = headerMap["MEETING TYPE"];
+      
+      // Find frequency column (varies)
+      let freqIdx = undefined;
+      for (const key in headerMap) {
+        if (key.includes("RECURRING") && key.includes("FREQUENCY")) {
+          freqIdx = headerMap[key];
+          break;
+        }
+      }
+      
+      // Get values
+      const dateVal = dateIdx !== undefined ? row[dateIdx] : null;
+      if (!dateVal) continue;
+      
+      // Convert date to YYYY-MM-DD
+      const d = new Date(dateVal);
+      if (isNaN(d.getTime())) continue;
+      
+      const isoDate = formatDateISO(d);
+      
+      // Build meeting object
+      const meeting = {
+        title: titleIdx !== undefined ? String(row[titleIdx] || "").trim() : "",
+        start: startIdx !== undefined ? String(row[startIdx] || "").trim() : "",
+        end: endIdx !== undefined ? String(row[endIdx] || "").trim() : "",
+        department: deptIdx !== undefined ? String(row[deptIdx] || "").trim() : "",
+        requester: reqIdx !== undefined ? String(row[reqIdx] || "").trim() : "",
+        type: typeIdx !== undefined ? String(row[typeIdx] || "").trim() : "",
+        frequency: freqIdx !== undefined ? String(row[freqIdx] || "").trim() : "NOT",
+        originalDate: isoDate,
+        zoomAccount: zoomIdx !== undefined ? String(row[zoomIdx] || "").trim() : ""
+      };
+      
+      meetings.push(meeting);
+      Logger.log("✅ Added meeting:", meeting.title, "on", isoDate);
     }
-
-    // Convert separate Date and Time columns into ISO strings
-    const startISO = formatISOString(prefDate, startTime);
-    const endISO = formatISOString(prefDate, endTime);
-
-    if (startISO && endISO) {
-      events.push({
-        title: title,
-        start: startISO,
-        end: endISO,
-        zoomAccount: zoomAccount.trim(), // Matches paxType filtering: "100 PAX", "300 PAX"
-        allDay: false,
-        // Color Legend styling assignments based on status parameters
-        backgroundColor: '#fee2e2', // Light Red background color
-        borderColor: '#fca5a5',     // Red borders
-        textColor: '#991b1b'        // Dark Red text
+    
+    Logger.log("✅ Total meetings found:", meetings.length);
+    
+    // Group by date for calendar display
+    const grouped = {};
+    meetings.forEach(m => {
+      if (!grouped[m.originalDate]) {
+        grouped[m.originalDate] = [];
+      }
+      grouped[m.originalDate].push(m);
+    });
+    
+    // Create calendar event array
+    const calendarEvents = [];
+    for (const dateKey in grouped) {
+      calendarEvents.push({
+        start: dateKey,
+        title: "●",
+        color: "transparent",
+        textColor: "#10b981",
+        extendedProps: {
+          meetings: grouped[dateKey]
+        }
       });
     }
+    
+    Logger.log("✅ Calendar events to return:", calendarEvents.length);
+    
+    return createJsonResponse(calendarEvents);
+    
+  } catch (error) {
+    Logger.error("❌ Error in doGet:", error.toString());
+    return createJsonResponse({error: error.toString()});
   }
-
-  // 4. Return clean text output JSON directly to the browser
-  return ContentService.createTextOutput(JSON.stringify(events))
-                       .setMimeType(ContentService.MimeType.JSON);
 }
-*/
+
+// Helper: Format date to ISO (YYYY-MM-DD)
+function formatDateISO(dateObj) {
+  const year = dateObj.getFullYear();
+  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const day = String(dateObj.getDate()).padStart(2, '0');
+  return year + '-' + month + '-' + day;
+}
+
+// Helper: Create JSON response with proper CORS headers
+function createJsonResponse(data) {
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+
+// Test function - run this to verify sheet reading
+function testRead() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName("Form Responses 1");
+  const allData = sheet.getDataRange().getValues();
+  
+  Logger.log("Total rows:", allData.length);
+  Logger.log("Row 3 (index 2):", allData[2]);
+  Logger.log("Row 4 (index 3) - HEADERS:", allData[3]);
+  Logger.log("Row 5 (index 4) - FIRST DATA:", allData[4]);
+  
+  if (allData[4]) {
+    Logger.log("First row status:", allData[4][allData[3].indexOf("STATUS")]);
+  }
+}
+
+
+</html>
+
