@@ -246,6 +246,13 @@
             width: 100%;
         }
 
+        .form-group input:disabled,
+        .form-group select:disabled {
+            background-color: #f1f5f9;
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
         .submit-btn {
             background: var(--accent-green);
             color: white;
@@ -260,6 +267,11 @@
 
         .submit-btn:hover {
             background: #059669;
+        }
+
+        .submit-btn:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
         }
 
         .meeting-list-item {
@@ -286,6 +298,27 @@
             border-radius: 6px;
             margin-bottom: 10px;
             font-size: 13px;
+        }
+
+        .recurring-end-section {
+            background: #f0f9ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .recurring-end-section label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .info-text {
+            font-size: 12px;
+            color: #1e40af;
+            margin-top: 5px;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -365,7 +398,9 @@
         const SHEET_ID = "1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M";
         const SHEET_GID = "893972695"; // Form Responses 1 sheet ID
         const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
-        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbydEQlGH6zU7Duf-n1btgtdTfshK5Cf4RHg-OC9JepkLFeAWvfbklnxCSF2gCgsaZOy/exec";
+        
+        // Ensure this URL matches your newly deployed web app URL from Apps Script
+        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTriwfx9Ga-9sLW7QKfjDVPxjC51F4yi0emUYzIr46uRLzxREpsgMtfrMPi9VegaOY/exec";
 
         let calendarInstance = null;
         let currentPaxType = "";
@@ -416,9 +451,8 @@
             return d;
         }
 
-        function projectRecurringEvents(rawMeetings, paxType) {
+        function projectRecurringEventsWithEndDate(rawMeetings, paxType) {
             const tempDaysMap = {};
-            const endProjectionLimit = new Date(2026, 11, 31);
 
             const relevantMeetings = rawMeetings.filter(m => {
                 return m.zoomAccount && m.zoomAccount.trim() === paxType;
@@ -428,6 +462,12 @@
             relevantMeetings.forEach(meeting => {
                 let currentTrackDate = parseISODate(meeting.originalDate);
                 const freq = meeting.frequency ? meeting.frequency.toUpperCase().trim() : "NOT";
+                
+                // Parse end date if it exists
+                let endDate = null;
+                if (meeting.recurringEndDate) {
+                    endDate = parseISODate(meeting.recurringEndDate);
+                }
 
                 if (freq === "NOT" || freq === "NO (ONE-TIME SLOT)") {
                     const isoStr = formatDateToISO(currentTrackDate);
@@ -435,7 +475,9 @@
                     tempDaysMap[isoStr].push(meeting);
                 } 
                 else if (freq === "WEEKLY" || freq === "WEEKLY SERIES") {
-                    while (currentTrackDate <= endProjectionLimit) {
+                    const limit = endDate ? endDate : new Date(2026, 11, 31);
+                    
+                    while (currentTrackDate <= limit) {
                         const isoStr = formatDateToISO(currentTrackDate);
                         if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
                         if (!tempDaysMap[isoStr].some(m => m.title === meeting.title && m.start === meeting.start)) {
@@ -445,7 +487,9 @@
                     }
                 } 
                 else if (freq === "MONTHLY" || freq === "MONTHLY SERIES") {
-                    while (currentTrackDate <= endProjectionLimit) {
+                    const limit = endDate ? endDate : new Date(2026, 11, 31);
+                    
+                    while (currentTrackDate <= limit) {
                         const isoStr = formatDateToISO(currentTrackDate);
                         if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
                         if (!tempDaysMap[isoStr].some(m => m.title === meeting.title && m.start === meeting.start)) {
@@ -498,7 +542,6 @@
             const headers = [];
             const csvLine = lines[3];
             
-            // Parse CSV headers properly
             let current = '';
             let insideQuotes = false;
             for (let j = 0; j < csvLine.length; j++) {
@@ -539,7 +582,6 @@
                 }
                 values.push(current.trim().replace(/^"|"$/g, ''));
 
-                // Find column indices
                 const statusIdx = headers.indexOf("STATUS");
                 const dateIdx = headers.indexOf("PREFERRED DATE");
                 const zoomIdx = headers.indexOf("ZOOM ACCOUNT");
@@ -551,15 +593,18 @@
                 const typeIdx = headers.indexOf("MEETING TYPE");
                 
                 let freqIdx = -1;
+                let recurringEndDateIdx = -1;
+                
                 for (let j = 0; j < headers.length; j++) {
                     const h = headers[j].toLowerCase();
                     if (h.includes("recurring") && h.includes("frequency")) {
                         freqIdx = j;
-                        break;
+                    }
+                    if (h.includes("recurring") && h.includes("end")) {
+                        recurringEndDateIdx = j;
                     }
                 }
 
-                // Only process APPROVED rows
                 if (statusIdx === -1 || !values[statusIdx] || values[statusIdx].toUpperCase() !== "APPROVED") {
                     continue;
                 }
@@ -572,6 +617,14 @@
 
                 const isoDate = formatDateToISO(dateObj);
 
+                let recurringEndDate = null;
+                if (recurringEndDateIdx >= 0 && values[recurringEndDateIdx]) {
+                    const endDateObj = parseDate(values[recurringEndDateIdx]);
+                    if (endDateObj) {
+                        recurringEndDate = formatDateToISO(endDateObj);
+                    }
+                }
+
                 const meeting = {
                     title: titleIdx >= 0 ? (values[titleIdx] || "") : "",
                     start: startIdx >= 0 ? (values[startIdx] || "") : "",
@@ -580,6 +633,7 @@
                     requester: reqIdx >= 0 ? (values[reqIdx] || "") : "",
                     type: typeIdx >= 0 ? (values[typeIdx] || "") : "",
                     frequency: freqIdx >= 0 ? (values[freqIdx] || "NOT") : "NOT",
+                    recurringEndDate: recurringEndDate,
                     originalDate: isoDate,
                     zoomAccount: zoomIdx >= 0 ? (values[zoomIdx] || "") : ""
                 };
@@ -645,7 +699,7 @@
             }
 
             allRawMeetings = meetings;
-            processedCalendarEvents = projectRecurringEvents(meetings, paxType);
+            processedCalendarEvents = projectRecurringEventsWithEndDate(meetings, paxType);
             console.log(`✅ Calendar events created for ${paxType}: ${processedCalendarEvents.length}`);
 
             const calendarEl = document.getElementById('calendar-container');
@@ -687,9 +741,10 @@
                 existingMeetings.forEach(m => {
                     const freq = m.frequency ? m.frequency.toUpperCase().trim() : "NOT";
                     const isRecur = freq !== "NOT" && freq !== "NO (ONE-TIME SLOT)";
+                    const recurInfo = isRecur && m.recurringEndDate ? ` (Until ${m.recurringEndDate})` : isRecur ? ' (Recurring)' : '';
                     html += `
                     <div class="meeting-list-item" style="border-left-color: ${isRecur ? 'var(--secondary-color)' : 'var(--primary-color)'}">
-                        <strong>${m.title || 'Untitled'}</strong> ${isRecur ? '<span style="color:var(--primary-color); font-weight:bold;">(Recurring)</span>' : ''}<br>
+                        <strong>${m.title || 'Untitled'}</strong> ${isRecur ? '<span style="color:var(--primary-color); font-weight:bold;">' + recurInfo + '</span>' : ''}<br>
                         ⏰ ${m.start || 'N/A'} - ${m.end || 'N/A'}<br>
                         <span style="font-size:11px; color:var(--text-secondary);">Dept: ${m.department || 'N/A'} | Req: ${m.requester || 'N/A'}</span>
                     </div>`;
@@ -733,11 +788,16 @@
                 </div>
                 <div class="form-group" style="margin-bottom:15px;">
                     <label>Is this a recurring meeting?</label>
-                    <select id="formFreq">
+                    <select id="formFreq" onchange="toggleRecurringEndDate()">
                         <option value="NOT">No (One-Time Slot)</option>
                         <option value="Weekly">Weekly Series</option>
                         <option value="Monthly">Monthly Series</option>
                     </select>
+                </div>
+                <div id="recurringEndDateContainer" class="recurring-end-section" style="display:none;">
+                    <label for="formRecurringEndDate">When should this recurring meeting end?</label>
+                    <input type="date" id="formRecurringEndDate" disabled>
+                    <p class="info-text">📅 Select the last date this meeting should occur.</p>
                 </div>
                 <button type="submit" class="submit-btn">Submit Booking Request</button>
             </form>`;
@@ -745,11 +805,41 @@
             panel.innerHTML = html;
         }
 
+        function toggleRecurringEndDate() {
+            const freqSelect = document.getElementById('formFreq');
+            const container = document.getElementById('recurringEndDateContainer');
+            const input = document.getElementById('formRecurringEndDate');
+            const selectedValue = freqSelect.value;
+
+            if (selectedValue === "NOT") {
+                container.style.display = 'none';
+                input.disabled = true;
+                input.value = '';
+            } else {
+                container.style.display = 'block';
+                input.disabled = false;
+                input.min = selectedDateStr;
+            }
+        }
+
         function handleFormSubmission(event, sheetDateFormat, isoDateStr) {
             event.preventDefault();
 
             const startRaw = document.getElementById('formStart').value;
             const endRaw = document.getElementById('formEnd').value;
+            const frequency = document.getElementById('formFreq').value;
+            const recurringEndDate = document.getElementById('formRecurringEndDate').value;
+
+            if (frequency !== "NOT" && !recurringEndDate) {
+                alert("⚠️ Please select an end date for the recurring meeting.");
+                return;
+            }
+
+            let recurringEndDateForSheet = '';
+            if (recurringEndDate) {
+                const [y, m, d] = recurringEndDate.split('-');
+                recurringEndDateForSheet = `${parseInt(m, 10)}/${parseInt(d, 10)}/${y}`;
+            }
 
             const finalStartStr = formatToSheetTime(startRaw);
             const finalEndStr = formatToSheetTime(endRaw);
@@ -785,7 +875,8 @@
                 preferredDate: sheetDateFormat,
                 startTime: finalStartStr,
                 endTime: finalEndStr,
-                frequency: document.getElementById('formFreq').value,
+                frequency: frequency,
+                recurringEndDate: recurringEndDateForSheet,
                 zoomAccount: currentPaxType
             };
 
@@ -795,11 +886,13 @@
             submitBtn.innerText = "Processing...";
             submitBtn.disabled = true;
 
+            // Operational fix: Changing Content-Type header explicitly to 'text/plain' 
+            // completely bypasses the automated CORS preflight restriction blocks.
             fetch(GOOGLE_APPS_SCRIPT_URL, {
                 method: "POST",
                 body: JSON.stringify(payload),
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'text/plain'
                 }
             })
                 .then(res => res.json())
@@ -832,163 +925,235 @@
     </script>
 </body>
 
-
-// // ============================================
-// ZOOM ACCOUNT MONITORING - Google Apps Script
-// ============================================
-
-function doGet(e) {
-  try {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName("Form Responses 1");
-    
-    if (!sheet) {
-      return createJsonResponse({error: "Sheet 'Form Responses 1' not found"});
-    }
-    
-    const allData = sheet.getDataRange().getValues();
-    
-    // Headers are in row 4 (index 3)
-    const headerRow = allData[3];
-    
-    // Create a map of header name to column index
-    const headerMap = {};
-    headerRow.forEach((header, index) => {
-      const cleanHeader = String(header || "").trim().toUpperCase();
-      headerMap[cleanHeader] = index;
-    });
-    
-    Logger.log("Header Map Keys:", Object.keys(headerMap));
-    
-    // Process data rows (starting from row 5, index 4)
-    const meetings = [];
-    
-    for (let i = 4; i < allData.length; i++) {
-      const row = allData[i];
-      
-      // Skip empty rows
-      if (!row || row.length === 0) continue;
-      if (row.every(cell => !cell || String(cell).trim() === "")) continue;
-      
-      // Check if STATUS is APPROVED
-      const statusIdx = headerMap["STATUS"];
-      if (statusIdx === undefined) continue;
-      
-      const status = String(row[statusIdx] || "").trim().toUpperCase();
-      if (status !== "APPROVED") continue;
-      
-      // Extract all required fields
-      const dateIdx = headerMap["PREFERRED DATE"];
-      const zoomIdx = headerMap["ZOOM ACCOUNT"];
-      const titleIdx = headerMap["MEETING TITLE"];
-      const startIdx = headerMap["START TIME"];
-      const endIdx = headerMap["END TIME"];
-      const deptIdx = headerMap["DEPARTMENT"];
-      const reqIdx = headerMap["REQUESTER NAME"];
-      const typeIdx = headerMap["MEETING TYPE"];
-      
-      // Find frequency column (varies)
-      let freqIdx = undefined;
-      for (const key in headerMap) {
-        if (key.includes("RECURRING") && key.includes("FREQUENCY")) {
-          freqIdx = headerMap[key];
-          break;
-        }
-      }
-      
-      // Get values
-      const dateVal = dateIdx !== undefined ? row[dateIdx] : null;
-      if (!dateVal) continue;
-      
-      // Convert date to YYYY-MM-DD
-      const d = new Date(dateVal);
-      if (isNaN(d.getTime())) continue;
-      
-      const isoDate = formatDateISO(d);
-      
-      // Build meeting object
-      const meeting = {
-        title: titleIdx !== undefined ? String(row[titleIdx] || "").trim() : "",
-        start: startIdx !== undefined ? String(row[startIdx] || "").trim() : "",
-        end: endIdx !== undefined ? String(row[endIdx] || "").trim() : "",
-        department: deptIdx !== undefined ? String(row[deptIdx] || "").trim() : "",
-        requester: reqIdx !== undefined ? String(row[reqIdx] || "").trim() : "",
-        type: typeIdx !== undefined ? String(row[typeIdx] || "").trim() : "",
-        frequency: freqIdx !== undefined ? String(row[freqIdx] || "").trim() : "NOT",
-        originalDate: isoDate,
-        zoomAccount: zoomIdx !== undefined ? String(row[zoomIdx] || "").trim() : ""
-      };
-      
-      meetings.push(meeting);
-      Logger.log("✅ Added meeting:", meeting.title, "on", isoDate);
-    }
-    
-    Logger.log("✅ Total meetings found:", meetings.length);
-    
-    // Group by date for calendar display
-    const grouped = {};
-    meetings.forEach(m => {
-      if (!grouped[m.originalDate]) {
-        grouped[m.originalDate] = [];
-      }
-      grouped[m.originalDate].push(m);
-    });
-    
-    // Create calendar event array
-    const calendarEvents = [];
-    for (const dateKey in grouped) {
-      calendarEvents.push({
-        start: dateKey,
-        title: "●",
-        color: "transparent",
-        textColor: "#10b981",
-        extendedProps: {
-          meetings: grouped[dateKey]
-        }
-      });
-    }
-    
-    Logger.log("✅ Calendar events to return:", calendarEvents.length);
-    
-    return createJsonResponse(calendarEvents);
-    
-  } catch (error) {
-    Logger.error("❌ Error in doGet:", error.toString());
-    return createJsonResponse({error: error.toString()});
-  }
-}
-
-// Helper: Format date to ISO (YYYY-MM-DD)
-function formatDateISO(dateObj) {
-  const year = dateObj.getFullYear();
-  const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-  const day = String(dateObj.getDate()).padStart(2, '0');
-  return year + '-' + month + '-' + day;
-}
-
-// Helper: Create JSON response with proper CORS headers
-function createJsonResponse(data) {
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-
-// Test function - run this to verify sheet reading
-function testRead() {
-  const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const sheet = ss.getSheetByName("Form Responses 1");
-  const allData = sheet.getDataRange().getValues();
-  
-  Logger.log("Total rows:", allData.length);
-  Logger.log("Row 3 (index 2):", allData[2]);
-  Logger.log("Row 4 (index 3) - HEADERS:", allData[3]);
-  Logger.log("Row 5 (index 4) - FIRST DATA:", allData[4]);
-  
-  if (allData[4]) {
-    Logger.log("First row status:", allData[4][allData[3].indexOf("STATUS")]);
-  }
-}
-
-
 </html>
 
+<!
+    // // ============================================
+    // ZOOM ACCOUNT MONITORING - Google Apps Script
+    // // ============================================
+
+    function doGet(e) {
+    try {
+        const ss = SpreadsheetApp.getActiveSpreadsheet();
+        const sheet = ss.getSheetByName("Form Responses 1");
+        
+        if (!sheet) {
+        return createJsonResponse({error: "Sheet 'Form Responses 1' not found"});
+        }
+        
+        const allData = sheet.getDataRange().getValues();
+        
+        // Headers are in row 4 (index 3)
+        const headerRow = allData[3];
+        
+        // Create a map of header name to column index
+        const headerMap = {};
+        headerRow.forEach((header, index) => {
+        const cleanHeader = String(header || "").trim().toUpperCase();
+        headerMap[cleanHeader] = index;
+        });
+        
+        Logger.log("Header Map Keys:", Object.keys(headerMap));
+        
+        // Process data rows (starting from row 5, index 4)
+        const meetings = [];
+        
+        for (let i = 4; i < allData.length; i++) {
+        const row = allData[i];
+        
+        // Skip empty rows
+        if (!row || row.length === 0) continue;
+        if (row.every(cell => !cell || String(cell).trim() === "")) continue;
+        
+        // Check if STATUS is APPROVED
+        const statusIdx = headerMap["STATUS"];
+        if (statusIdx === undefined) continue;
+        
+        const status = String(row[statusIdx] || "").trim().toUpperCase();
+        if (status !== "APPROVED") continue;
+        
+        // Extract all required fields
+        const dateIdx = headerMap["PREFERRED DATE"];
+        const zoomIdx = headerMap["ZOOM ACCOUNT"];
+        const titleIdx = headerMap["MEETING TITLE"];
+        const startIdx = headerMap["START TIME"];
+        const endIdx = headerMap["END TIME"];
+        const deptIdx = headerMap["DEPARTMENT"];
+        const reqIdx = headerMap["REQUESTER NAME"];
+        const typeIdx = headerMap["MEETING TYPE"];
+        
+        // Find frequency column (varies)
+        let freqIdx = undefined;
+        for (const key in headerMap) {
+            if (key.includes("RECURRING") && key.includes("FREQUENCY")) {
+            freqIdx = headerMap[key];
+            break;
+            }
+        }
+        
+        // Get values
+        const dateVal = dateIdx !== undefined ? row[dateIdx] : null;
+        if (!dateVal) continue;
+        
+        // Convert date to YYYY-MM-DD
+        const d = new Date(dateVal);
+        if (isNaN(d.getTime())) continue;
+        
+        const isoDate = formatDateISO(d);
+        
+        // Build meeting object
+        const meeting = {
+            title: titleIdx !== undefined ? String(row[titleIdx] || "").trim() : "",
+            start: startIdx !== undefined ? String(row[startIdx] || "").trim() : "",
+            end: endIdx !== undefined ? String(row[endIdx] || "").trim() : "",
+            department: deptIdx !== undefined ? String(row[deptIdx] || "").trim() : "",
+            requester: reqIdx !== undefined ? String(row[reqIdx] || "").trim() : "",
+            type: typeIdx !== undefined ? String(row[typeIdx] || "").trim() : "",
+            frequency: freqIdx !== undefined ? String(row[freqIdx] || "").trim() : "NOT",
+            originalDate: isoDate,
+            zoomAccount: zoomIdx !== undefined ? String(row[zoomIdx] || "").trim() : ""
+        };
+        
+        meetings.push(meeting);
+        Logger.log("✅ Added meeting:", meeting.title, "on", isoDate);
+        }
+        
+        Logger.log("✅ Total meetings found:", meetings.length);
+        
+        // Group by date for calendar display
+        const grouped = {};
+        meetings.forEach(m => {
+        if (!grouped[m.originalDate]) {
+            grouped[m.originalDate] = [];
+        }
+        grouped[m.originalDate].push(m);
+        });
+        
+        // Create calendar event array
+        const calendarEvents = [];
+        for (const dateKey in grouped) {
+        calendarEvents.push({
+            start: dateKey,
+            title: "●",
+            color: "transparent",
+            textColor: "#10b981",
+            extendedProps: {
+            meetings: grouped[dateKey]
+            }
+        });
+        }
+        
+        Logger.log("✅ Calendar events to return:", calendarEvents.length);
+        
+        return createJsonResponse(calendarEvents);
+        
+    } catch (error) {
+        Logger.error("❌ Error in doGet:", error.toString());
+        return createJsonResponse({error: error.toString()});
+    }
+    }
+
+    function doPost(e) {
+    try {
+        // 1. Verify data package contents securely
+        if (!e || !e.postData || !e.postData.contents) {
+        return createJsonResponse({ status: "error", message: "No text contents found in your form request." });
+        }
+        
+        const data = JSON.parse(e.postData.contents);
+        const ss = SpreadsheetApp.getActiveSpreadsheet();
+        const sheet = ss.getSheetByName("Form Responses 1");
+        
+        if (!sheet) {
+        return createJsonResponse({ status: "error", message: "Sheet 'Form Responses 1' not found." });
+        }
+        
+        const allData = sheet.getDataRange().getValues();
+        const headerRow = allData[3]; // Headers located on row 4 (index 3)
+        
+        if (!headerRow) {
+        return createJsonResponse({ status: "error", message: "Target sheet headers missing on row 4." });
+        }
+        
+        // 2. Build index cross-reference dictionary matching headers dynamically
+        const headerMap = {};
+        headerRow.forEach((header, index) => {
+        const cleanHeader = String(header || "").trim().toUpperCase();
+        headerMap[cleanHeader] = index;
+        });
+        
+        // Find dynamic labels for variations of recurring columns
+        let freqHeaderKey = "RECURRING FREQUENCY";
+        for (const key in headerMap) {
+        if (key.includes("RECURRING") && key.includes("FREQUENCY")) {
+            freqHeaderKey = key;
+            break;
+        }
+        }
+        
+        let endHeaderKey = "RECURRING END DATE";
+        for (const key in headerMap) {
+        if (key.includes("RECURRING") && key.includes("END")) {
+            endHeaderKey = key;
+            break;
+        }
+        }
+        
+        // 3. Line data up to standard configuration pattern structure
+        const newRow = new Array(headerRow.length).fill("");
+        
+        if (headerMap["STATUS"] !== undefined) newRow[headerMap["STATUS"]] = "APPROVED"; // Change to "PENDING" if you require human verification
+        if (headerMap["REQUESTER NAME"] !== undefined) newRow[headerMap["REQUESTER NAME"]] = data.requesterName || "";
+        if (headerMap["DEPARTMENT"] !== undefined) newRow[headerMap["DEPARTMENT"]] = data.department || "";
+        if (headerMap["MEETING TITLE"] !== undefined) newRow[headerMap["MEETING TITLE"]] = data.meetingTitle || "";
+        if (headerMap["MEETING TYPE"] !== undefined) newRow[headerMap["MEETING TYPE"]] = data.meetingType || "";
+        if (headerMap["PREFERRED DATE"] !== undefined) newRow[headerMap["PREFERRED DATE"]] = data.preferredDate || "";
+        if (headerMap["START TIME"] !== undefined) newRow[headerMap["START TIME"]] = data.startTime || "";
+        if (headerMap["END TIME"] !== undefined) newRow[headerMap["END TIME"]] = data.endTime || "";
+        if (headerMap[freqHeaderKey] !== undefined) newRow[headerMap[freqHeaderKey]] = data.frequency || "NOT";
+        if (headerMap[endHeaderKey] !== undefined) newRow[headerMap[endHeaderKey]] = data.recurringEndDate || "";
+        if (headerMap["ZOOM ACCOUNT"] !== undefined) newRow[headerMap["ZOOM ACCOUNT"]] = data.zoomAccount || "";
+        
+        if (headerMap["TIMESTAMP"] !== undefined) {
+        newRow[headerMap["TIMESTAMP"]] = new Date();
+        }
+        
+        // 4. Append operational row to targeted spreadsheet tracking index
+        sheet.appendRow(newRow);
+        return createJsonResponse({ status: "success", message: "Booking saved to storage successfully!" });
+        
+    } catch (error) {
+        return createJsonResponse({ status: "error", message: error.toString() });
+    }
+    }
+
+    // Helper: Format date to ISO (YYYY-MM-DD)
+    function formatDateISO(dateObj) {
+    const year = dateObj.getFullYear();
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    return year + '-' + month + '-' + day;
+    }
+
+    // Helper: Create JSON response with proper CORS headers
+    function createJsonResponse(data) {
+    return ContentService
+        .createTextOutput(JSON.stringify(data))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // Test function - run this to verify sheet reading
+    function testRead() {
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheet = ss.getSheetByName("Form Responses 1");
+    const allData = sheet.getDataRange().getValues();
+    
+    Logger.log("Total rows:", allData.length);
+    Logger.log("Row 3 (index 2):", allData[2]);
+    Logger.log("Row 4 (index 3) - HEADERS:", allData[3]);
+    Logger.log("Row 5 (index 4) - FIRST DATA:", allData[4]);
+    if (allData[4]) {
+        Logger.log("First row status:", allData[4][allData[3].indexOf("STATUS")]);
+    }
+    }
+>
