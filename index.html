@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zoom Account Monitoring System</title>
+    <title>Zoom Account Portal v2.0</title>
 
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
@@ -76,19 +76,69 @@
             color: var(--text-secondary);
         }
 
+        .nav-container {
+            max-width: 1400px;
+            width: 100%;
+            margin: 1.5rem auto 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .view-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .switch-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .switch-link:hover {
+            text-decoration: underline;
+        }
+
         .container {
             flex: 1;
             width: 100%;
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .user-portal-container {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            width: 100%;
+        }
+
+        .user-portal-row {
+            display: flex;
+            gap: 2rem;
+            flex: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 2rem;
         }
 
         .capacity-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            width: 320px;
+            flex-shrink: 0;
         }
 
         .capacity-card {
@@ -101,6 +151,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            min-height: 160px;
         }
 
         .capacity-card:hover {
@@ -131,12 +182,36 @@
             color: white;
         }
 
+        .user-portal-left {
+            width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            flex-shrink: 0;
+        }
+
+        .user-portal-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .inline-calendar-container {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            flex: 1;
+        }
+
         .legend-section {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 1.25rem;
-            margin-bottom: 1rem;
+            width: 320px;
+            flex-shrink: 0;
         }
 
         .legend-grid {
@@ -158,6 +233,215 @@
             flex-shrink: 0;
         }
 
+        /* Admin Layout Rules */
+        .admin-section {
+            width: 100%;
+        }
+
+        .admin-summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .summary-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .summary-card h3 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .summary-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .admin-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.01);
+        }
+
+        .admin-card h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 1.25rem;
+        }
+
+        .admin-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 1.25rem;
+        }
+
+        .export-btn {
+            background: white;
+            color: var(--primary-color);
+            border: 1px solid rgba(14, 113, 235, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .export-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .export-btn:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+            border-color: var(--border-color);
+            cursor: not-allowed;
+        }
+
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.25rem;
+        }
+
+        .filter-input {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            color: var(--text-primary);
+        }
+
+        #filterSearch {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            text-align: left;
+        }
+
+        .admin-table th, .admin-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .admin-table th {
+            background: #f8fafc;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .approve-action-btn {
+            background: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .approve-action-btn:hover {
+            background: #059669;
+        }
+
+        .approve-action-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .reject-action-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 8px;
+        }
+
+        .reject-action-btn:hover {
+            background: #dc2626;
+        }
+
+        .reject-action-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .delete-action-btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 13px;
+            margin-left: 8px;
+        }
+
+        .delete-action-btn:hover {
+            background: #7c3aed;
+        }
+
+        .delete-action-btn:disabled {
+            background: #cbd5e1;
+            cursor: not-allowed;
+        }
+
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-badge.approved {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .status-badge.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status-badge.rejected {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Modal Layout Window */
         .modal {
             display: none;
             position: fixed;
@@ -175,7 +459,7 @@
             background: var(--card-bg);
             border-radius: 16px;
             width: 95%;
-            max-width: 1200px;
+            max-width: 1250px;
             height: 85vh;
             display: flex;
             flex-direction: column;
@@ -209,7 +493,7 @@
         }
 
         .calendar-side {
-            flex: 1.3;
+            flex: 1.4;
             overflow-y: auto;
         }
 
@@ -246,13 +530,6 @@
             width: 100%;
         }
 
-        .form-group input:disabled,
-        .form-group select:disabled {
-            background-color: #f1f5f9;
-            color: var(--text-secondary);
-            cursor: not-allowed;
-        }
-
         .submit-btn {
             background: var(--accent-green);
             color: white;
@@ -276,28 +553,60 @@
 
         .meeting-list-item {
             background: white;
-            padding: 10px;
+            padding: 12px;
             border-left: 4px solid var(--primary-color);
             border-radius: 4px;
             margin-bottom: 8px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
             font-size: 13px;
         }
 
         .fc-daygrid-event {
             background: transparent !important;
             border: none !important;
-            justify-content: center;
+            padding: 0 !important;
+            margin: 0 !important;
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: auto !important;
+            height: auto !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            z-index: 5 !important;
         }
 
-        .error-banner {
-            background: #fee2e2;
-            border: 1px solid #fca5a5;
-            color: #991b1b;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 10px;
-            font-size: 13px;
+        .fc-daygrid-event-harness {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+
+        .fc-event-title {
+            font-size: 24px !important;
+            line-height: 1 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        .fc-daygrid-day-frame {
+            position: relative !important;
+        }
+
+        .fc-daygrid-day-cell {
+            position: relative !important;
+        }
+
+        .fc-daygrid-day-number {
+            position: relative;
+            z-index: 1;
         }
 
         .recurring-end-section {
@@ -305,13 +614,6 @@
             border: 1px solid #bfdbfe;
             border-radius: 8px;
             padding: 12px;
-            margin-bottom: 10px;
-        }
-
-        .recurring-end-section label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #1e40af;
         }
 
         .info-text {
@@ -319,6 +621,208 @@
             color: #1e40af;
             margin-top: 5px;
             font-weight: 500;
+        }
+
+        .time-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .time-input-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        /* ============================================
+           RESPONSIVE BREAKPOINTS
+           Tablet: <=1024px | Mobile: <=640px
+           ============================================ */
+
+        /* ---- Tablet & below (laptops with narrow windows too) ---- */
+        @media (max-width: 1024px) {
+            .container {
+                padding: 1.25rem;
+                gap: 1.25rem;
+            }
+
+            .user-portal-row {
+                flex-direction: column;
+                padding: 1.25rem;
+                gap: 1.5rem;
+            }
+
+            .user-portal-left {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+
+            .capacity-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+                width: 100%;
+                flex: 1 1 auto;
+            }
+
+            .legend-section {
+                width: 100%;
+                flex: 1 1 100%;
+            }
+
+            .modal-content {
+                max-width: 95%;
+            }
+        }
+
+        /* ---- Mobile & small tablets ---- */
+        @media (max-width: 768px) {
+            .main-header {
+                padding: 0.7rem 1.25rem;
+            }
+
+            .header-container {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .system-logo {
+                height: 34px;
+            }
+
+            .brand-text h1 {
+                font-size: 17px;
+            }
+
+            .brand-text .subtitle {
+                font-size: 11.5px;
+            }
+
+            .nav-container {
+                padding: 0 1.25rem;
+                flex-wrap: wrap;
+                gap: 10px;
+                margin-top: 1rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
+            .user-portal-row {
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .user-portal-left {
+                flex-direction: column;
+            }
+
+            .capacity-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .capacity-card {
+                min-height: unset;
+                padding: 1.25rem;
+            }
+
+            .admin-summary-cards {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 12px;
+                margin-bottom: 1.5rem;
+            }
+
+            .summary-card {
+                padding: 1rem;
+            }
+
+            .summary-card h3 {
+                font-size: 24px;
+            }
+
+            .admin-card {
+                padding: 1rem;
+                border-radius: 12px;
+            }
+
+            .admin-card-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .export-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            #filterSearch,
+            .filter-input {
+                width: 100%;
+                min-width: 0;
+            }
+
+            #filterResultCount {
+                text-align: left;
+            }
+
+            .admin-table th,
+            .admin-table td {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .modal-content {
+                width: 100%;
+                height: 100%;
+                max-height: 100vh;
+                border-radius: 0;
+                padding: 1rem;
+            }
+
+            .time-input-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .fc-toolbar {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .fc-toolbar-title {
+                font-size: 16px !important;
+            }
+        }
+
+        /* ---- Very small phones ---- */
+        @media (max-width: 400px) {
+            .brand-text .subtitle {
+                display: none;
+            }
+
+            .view-badge {
+                font-size: 12px;
+                padding: 5px 12px;
+            }
+
+            .switch-link {
+                font-size: 13px;
+            }
+
+            .approve-action-btn,
+            .reject-action-btn,
+            .delete-action-btn {
+                display: block;
+                width: 100%;
+                margin: 4px 0 0 0;
+            }
         }
     </style>
 </head>
@@ -328,86 +832,728 @@
     <header class="main-header">
         <div class="header-container">
             <div class="left-header-section">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg"
-                    alt="Zoom Logo" class="system-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg" alt="Zoom Logo" class="system-logo">
                 <div class="brand-text">
-                    <h1>Zoom Account Portal</h1>
-                    <p class="subtitle">Direct Interactive Booking and Capacity Monitoring Engine</p>
+                    <h1>Zoom Account Portal v2.0</h1>
+                    <p class="subtitle">Interactive Booking and Capacity Tracking Matrix</p>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="container">
-        <section class="capacity-grid">
-            <div class="capacity-card" onclick="openSchedule('100 PAX')">
-                <h2>100 PAX Account</h2>
-                <p style="font-size:13px; color:var(--text-secondary);">Manage and book the standard team synchronization room.</p>
-                <button class="btn">View & Book</button>
-            </div>
-            <div class="capacity-card" onclick="openSchedule('300 PAX')">
-                <h2>300 PAX Account</h2>
-                <p style="font-size:13px; color:var(--text-secondary);">Manage larger online workshops, webinars, and conferences.</p>
-                <button class="btn">View & Book</button>
-            </div>
-            <div class="capacity-card" onclick="openSchedule('500 PAX')">
-                <h2>500 PAX Account</h2>
-                <p style="font-size:13px; color:var(--text-secondary);">Book the enterprise auditorium for large-scale corporate broadcasts.</p>
-                <button class="btn">View & Book</button>
-            </div>
-        </section>
+    <div class="nav-container">
+        <span id="viewIndicator" class="view-badge">User Portal</span>
+        <a id="dashboardSwitchLink" href="?page=admin" class="switch-link">Go to Admin Dashboard →</a>
+    </div>
 
-        <div class="legend-section">
-            <div class="legend-grid">
-                <div class="legend-item">
-                    <div class="legend-color-dot" style="background:#10b981;"></div><span> Available / Open Slot</span>
+    <div class="container">
+        <div id="userPortalContainer" class="user-portal-container">
+            <div class="user-portal-row">
+                <!-- LEFT SIDE: Capacity Cards + Legend -->
+                <div class="user-portal-left">
+                    <section class="capacity-grid">
+                        <div class="capacity-card" onclick="initializeCalendar('100 PAX')">
+                            <h2>100 PAX Account</h2>
+                            <p style="font-size:13px; color:var(--text-secondary); margin-top: 6px;">Manage and book the standard team synchronization room.</p>
+                            <button class="btn">View & Book</button>
+                        </div>
+                        <div class="capacity-card" onclick="initializeCalendar('300 PAX')">
+                            <h2>300 PAX Account</h2>
+                            <p style="font-size:13px; color:var(--text-secondary); margin-top: 6px;">Manage larger online workshops, webinars, and conferences.</p>
+                            <button class="btn">View & Book</button>
+                        </div>
+                        <div class="capacity-card" onclick="initializeCalendar('500 PAX')">
+                            <h2>500 PAX Account</h2>
+                            <p style="font-size:13px; color:var(--text-secondary); margin-top: 6px;">Book the enterprise auditorium for large-scale corporate broadcasts.</p>
+                            <button class="btn">View & Book</button>
+                        </div>
+                    </section>
+
+                    <div class="legend-section">
+                        <div class="legend-grid">
+                            <div class="legend-item">
+                                <div class="legend-color-dot" style="background:#10b981;"></div><span>Available (7am-7pm)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color-dot" style="background:#f59e0b;"></div><span>Partially Booked</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color-dot" style="background:#ef4444;"></div><span>Fully Booked (7am-7pm)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color-dot" style="background:#0E71EB;"></div><span>Recurring Series</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color-dot" style="background:#f59e0b;"></div><span> Partially Booked</span>
+
+                <!-- RIGHT SIDE: Calendar -->
+                <div class="user-portal-right">
+                    <div id="selectedAccountDisplay" style="padding: 1rem; background: #f0f9ff; border: 1px solid #bfdbfe; border-radius: 8px;">
+                        <h3 id="selectedAccountTitle" style="margin: 0; color: #0E71EB; font-size: 16px;">Calendar for <span id="selectedPaxType">100 PAX</span></h3>
+                    </div>
+                    <div class="inline-calendar-container">
+                        <div id="inline-calendar" style="min-height: 500px;"></div>
+                    </div>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color-dot" style="background:#ef4444;"></div><span> Fully Booked</span>
+            </div>
+        </div>
+
+        <div id="adminPanel" class="admin-section" style="display: none;">
+            <div class="admin-summary-cards">
+                <div class="summary-card">
+                    <h3 id="statPendingCount">0</h3>
+                    <p>Pending Approvals</p>
                 </div>
-                <div class="legend-item">
-                    <div class="legend-color-dot" style="background:#0E71EB;"></div><span> Recurring Series Meeting</span>
+                <div class="summary-card">
+                    <h3 id="statApprovedCount">0</h3>
+                    <p>Active Approved Meetings</p>
+                </div>
+                <div class="summary-card">
+                    <h3 id="statRejectedCount" style="color:#ef4444;">0</h3>
+                    <p>Rejected Requests</p>
+                </div>
+                <div class="summary-card">
+                    <h3 id="statTotalCount" style="color:#0f172a;">0</h3>
+                    <p>Total Bookings (All Time)</p>
+                </div>
+            </div>
+
+            <div class="admin-card">
+                <div class="admin-card-header">
+                    <h2 style="margin-bottom:0;">Pending Booking Requests</h2>
+                    <button class="export-btn" onclick="exportPendingCSV()">⬇ Export Pending CSV</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Requester</th>
+                                <th>Department</th>
+                                <th>Meeting Title</th>
+                                <th>Account</th>
+                                <th>Requested Slot</th>
+                                <th>Recurrence Frequency</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pendingRequestsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-secondary);">Loading pending records...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="admin-card" style="margin-top: 2rem;">
+                <div class="admin-card-header">
+                    <h2 style="margin-bottom:0;">All System Bookings Log</h2>
+                    <button class="export-btn" onclick="exportFilteredCSV()">⬇ Export CSV</button>
+                </div>
+
+                <div class="filter-bar">
+                    <input type="text" id="filterSearch" class="filter-input" placeholder="Search requester, department, or title..." oninput="applyAdminFilters()">
+                    <select id="filterStatus" class="filter-input" onchange="applyAdminFilters()">
+                        <option value="ALL">All Statuses</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="APPROVED">Approved</option>
+                        <option value="REJECTED">Rejected</option>
+                    </select>
+                    <select id="filterAccount" class="filter-input" onchange="applyAdminFilters()">
+                        <option value="ALL">All Accounts</option>
+                        <option value="100 PAX">100 PAX</option>
+                        <option value="300 PAX">300 PAX</option>
+                        <option value="500 PAX">500 PAX</option>
+                    </select>
+                    <span id="filterResultCount" style="font-size:13px; color:var(--text-secondary); white-space:nowrap;"></span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Requester</th>
+                                <th>Meeting Title</th>
+                                <th>Account</th>
+                                <th>Preferred Date</th>
+                                <th>Time Slot</th>
+                                <th>Frequency Pattern</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="allBookingsTableBody">
+                            <tr>
+                                <td colspan="7" style="text-align: center; color: var(--text-secondary);">Loading records log history...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 
     <div id="calendarModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="max-width: 600px; height: auto;">
             <div class="modal-header">
-                <h2>Schedule Dashboard: <span id="modalPaxTitle">100 PAX</span></h2>
+                <h2>Book a Meeting</h2>
                 <button class="close-btn" onclick="closeModal()">Close ✕</button>
             </div>
-            <div class="modal-body">
-                <div class="calendar-side">
-                    <div id="calendar-container"></div>
-                </div>
-                <div class="details-side" id="detailsPanel">
-                    <h3>Loading calendar...</h3>
-                    <p style="color:var(--text-secondary); font-size:13px;">Please wait while we fetch your schedule data.</p>
-                </div>
+            <div class="modal-body" style="flex-direction: column; overflow-y: auto; padding: 1.5rem;">
+                <div id="bookingForm"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // Your Google Sheet ID - make sure sheet is publicly accessible
-        const SHEET_ID = "1NS0QAvk65CG5IdZoB12VDY9rWcRFDzlJpW5viQ_Yb5M";
-        const SHEET_GID = "893972695"; // Form Responses 1 sheet ID
-        const CSV_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
-        
-        // Ensure this URL matches your newly deployed web app URL from Apps Script
-        const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwTriwfx9Ga-9sLW7QKfjDVPxjC51F4yi0emUYzIr46uRLzxREpsgMtfrMPi9VegaOY/exec";
-
+        // ============================================
+        // GLOBAL APPLICATION INSTANCE STATE
+        // ============================================
         let calendarInstance = null;
         let currentPaxType = "";
         let selectedDateStr = "";
-        let processedCalendarEvents = [];
         let allRawMeetings = [];
+        let adminBookingsCache = [];
+        const BOOKINGS_KEY = "bookings";
 
+        // ============================================
+        // ROUTING DISPATCHER ENGINE
+        // ============================================
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetPage = urlParams.get('page');
+
+            if (targetPage === 'admin') {
+                // Adjust Navigation UI Elements
+                document.getElementById('viewIndicator').innerText = "Admin Control Center";
+                document.getElementById('viewIndicator').style.background = "#fef3c7";
+                document.getElementById('viewIndicator').style.color = "#d97706";
+                document.getElementById('dashboardSwitchLink').href = "?page=user";
+                document.getElementById('dashboardSwitchLink').innerText = "← Back to User Portal";
+
+                // Swap View Layers
+                document.getElementById('userPortalContainer').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+
+                loadAdminData();
+            } else {
+                document.getElementById('viewIndicator').innerText = "User Portal";
+                document.getElementById('dashboardSwitchLink').href = "?page=admin";
+                document.getElementById('dashboardSwitchLink').innerText = "Go to Admin Dashboard →";
+
+                document.getElementById('userPortalContainer').style.display = 'block';
+                document.getElementById('adminPanel').style.display = 'none';
+
+                preloadUserData();
+            }
+        });
+
+        // ============================================
+        // STORAGE LAYER (client-side, no backend yet)
+        // Bookings are stored as SHARED data so the admin
+        // view and every visitor's user view see the same
+        // list. This means booking details are visible to
+        // anyone who opens this page.
+        // ============================================
+        async function loadAllBookings() {
+            if (window.storage) {
+                try {
+                    const result = await window.storage.get(BOOKINGS_KEY, true);
+                    return result && result.value ? JSON.parse(result.value) : [];
+                } catch (err) {
+                    return [];
+                }
+            }
+            // Fallback for standalone use (opened directly in a browser,
+            // or hosted on your own server) - uses this browser's local storage.
+            // NOTE: data saved this way stays on this device/browser only and
+            // will NOT be shared between different visitors until a real
+            // backend is connected.
+            try {
+                const raw = localStorage.getItem(BOOKINGS_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (err) {
+                console.error("localStorage read error:", err);
+                return [];
+            }
+        }
+
+        async function saveAllBookings(bookings) {
+            if (window.storage) {
+                try {
+                    const result = await window.storage.set(BOOKINGS_KEY, JSON.stringify(bookings), true);
+                    return !!result;
+                } catch (err) {
+                    console.error("Storage save error:", err);
+                    return false;
+                }
+            }
+            try {
+                localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
+                return true;
+            } catch (err) {
+                console.error("localStorage save error:", err);
+                return false;
+            }
+        }
+
+        function nextBookingId(bookings) {
+            if (!bookings.length) return 1;
+            return Math.max(...bookings.map(b => b.id || 0)) + 1;
+        }
+
+        // ============================================
+        // DATA LOADING METHODS
+        // ============================================
+        async function fetchAllMeetings() {
+            const bookings = await loadAllBookings();
+            allRawMeetings = bookings;
+            return bookings;
+        }
+
+        function preloadUserData() {
+            fetchAllMeetings()
+                .then(data => {
+                    console.log("Dataset loaded. Total entries: " + data.length);
+                    // Initialize default calendar with 100 PAX
+                    initializeCalendar('100 PAX');
+                })
+                .catch(err => {
+                    console.error("Preload error fallback:", err);
+                    initializeCalendar('100 PAX');
+                });
+        }
+
+        function loadAdminData() {
+            const tbodyPending = document.getElementById('pendingRequestsTableBody');
+            const tbodyAll = document.getElementById('allBookingsTableBody');
+
+            tbodyPending.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading data...</td></tr>';
+            tbodyAll.innerHTML = '<tr><td colspan="7" style="text-align: center;">Loading master history logs...</td></tr>';
+
+            fetchAllMeetings().then(data => {
+                if (!Array.isArray(data)) {
+                    throw new Error("Invalid data format received");
+                }
+                adminBookingsCache = data.filter(m => m && typeof m === 'object');
+
+                renderPendingTable(adminBookingsCache);
+                updateSummaryStats(adminBookingsCache);
+                applyAdminFilters();
+            }).catch(err => {
+                console.error("Admin data load error:", err);
+                tbodyPending.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444;">❌ Error loading bookings: ${err.message || err}</td></tr>`;
+                tbodyAll.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444;">❌ Error loading bookings: ${err.message || err}</td></tr>`;
+            });
+        }
+
+        function updateSummaryStats(data) {
+            let pendingCount = 0, approvedCount = 0, rejectedCount = 0;
+            data.forEach(m => {
+                const status = String(m.status || "").toUpperCase().trim();
+                if (status === "PENDING") pendingCount++;
+                else if (status === "APPROVED") approvedCount++;
+                else if (status === "REJECTED") rejectedCount++;
+            });
+            document.getElementById('statPendingCount').innerText = pendingCount;
+            document.getElementById('statApprovedCount').innerText = approvedCount;
+            document.getElementById('statRejectedCount').innerText = rejectedCount;
+            document.getElementById('statTotalCount').innerText = data.length;
+        }
+
+        function renderPendingTable(data) {
+            const tbodyPending = document.getElementById('pendingRequestsTableBody');
+            try {
+                const pendingRows = data.filter(m => String(m.status || "").toUpperCase().trim() === "PENDING");
+
+                if (pendingRows.length === 0) {
+                    tbodyPending.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-secondary);">No pending requests found awaiting approval.</td></tr>';
+                    return;
+                }
+
+                tbodyPending.innerHTML = pendingRows.map(m => {
+                    const reqDate = m.preferredDate || 'N/A';
+                    const timeSlot = `${m.startTime || ''} - ${m.endTime || ''}`;
+                    const isRecur = m.frequency && m.frequency !== "NOT"
+                        ? `${m.frequency} (Until ${m.recurringEndDate || 'N/A'})`
+                        : 'Single Slot';
+                    return `
+                        <tr>
+                            <td><strong>${m.requesterName || 'N/A'}</strong></td>
+                            <td>${m.department || 'N/A'}</td>
+                            <td>${m.meetingTitle || 'Untitled'}</td>
+                            <td><span class="view-badge" style="background:#f1f5f9; color:#475569;">${m.zoomAccount || 'N/A'}</span></td>
+                            <td>${reqDate}<br><small style="color:var(--text-secondary);">${timeSlot}</small></td>
+                            <td><small>${isRecur}</small></td>
+                            <td>
+                                <button class="approve-action-btn" onclick="approveMeetingRow(${m.id})">Approve</button>
+                                <button class="reject-action-btn" onclick="rejectMeetingRow(${m.id})">Reject</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error("Pending table render error:", err);
+                tbodyPending.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444;">❌ Error rendering pending requests: ${err.message}</td></tr>`;
+            }
+        }
+
+        function renderAllBookingsTable(data) {
+            const tbodyAll = document.getElementById('allBookingsTableBody');
+            try {
+                if (data.length === 0) {
+                    tbodyAll.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-secondary);">No bookings match the current filters.</td></tr>';
+                    return;
+                }
+
+                tbodyAll.innerHTML = data.map(m => {
+                    const status = String(m.status || "").toUpperCase().trim();
+                    const reqDate = m.preferredDate || 'N/A';
+                    const timeSlot = `${m.startTime || ''} - ${m.endTime || ''}`;
+                    return `
+                        <tr>
+                            <td><span class="status-badge ${status.toLowerCase()}">${status}</span></td>
+                            <td><strong>${m.requesterName || 'N/A'}</strong></td>
+                            <td>${m.meetingTitle || 'Untitled'}</td>
+                            <td>${m.zoomAccount || 'N/A'}</td>
+                            <td>${reqDate}</td>
+                            <td><small>${timeSlot}</small></td>
+                            <td><small>${m.frequency || 'NOT'}</small></td>
+                            <td>
+                                <button class="delete-action-btn" onclick="deleteMeetingRow(${m.id})">Delete</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (err) {
+                console.error("All-bookings table render error:", err);
+                tbodyAll.innerHTML = `<tr><td colspan="7" style="text-align: center; color: #ef4444;">❌ Error rendering bookings: ${err.message}</td></tr>`;
+            }
+        }
+
+        // ============================================
+        // ADMIN FILTERING (search box + status/account dropdowns)
+        // ============================================
+        function getFilteredBookings() {
+            const searchEl = document.getElementById('filterSearch');
+            const statusEl = document.getElementById('filterStatus');
+            const accountEl = document.getElementById('filterAccount');
+
+            const searchTerm = searchEl ? searchEl.value.trim().toLowerCase() : '';
+            const statusFilter = statusEl ? statusEl.value : 'ALL';
+            const accountFilter = accountEl ? accountEl.value : 'ALL';
+
+            return adminBookingsCache.filter(m => {
+                const status = String(m.status || "").toUpperCase().trim();
+                if (statusFilter !== 'ALL' && status !== statusFilter) return false;
+
+                const account = String(m.zoomAccount || '').trim();
+                if (accountFilter !== 'ALL' && account !== accountFilter) return false;
+
+                if (searchTerm) {
+                    const haystack = [m.requesterName, m.department, m.meetingTitle]
+                        .map(v => String(v || '').toLowerCase())
+                        .join(' | ');
+                    if (!haystack.includes(searchTerm)) return false;
+                }
+
+                return true;
+            });
+        }
+
+        function applyAdminFilters() {
+            const filtered = getFilteredBookings();
+            renderAllBookingsTable(filtered);
+
+            const countEl = document.getElementById('filterResultCount');
+            if (countEl) {
+                countEl.innerText = `Showing ${filtered.length} of ${adminBookingsCache.length} bookings`;
+            }
+        }
+
+        // ============================================
+        // CSV EXPORT
+        // ============================================
+        function escapeCSVValue(val) {
+            const str = String(val === undefined || val === null ? '' : val);
+            if (/[",\n\r]/.test(str)) {
+                return '"' + str.replace(/"/g, '""') + '"';
+            }
+            return str;
+        }
+
+        function bookingsToCSV(bookings) {
+            const headers = [
+                'ID', 'Status', 'Requester Name', 'Department', 'Meeting Title',
+                'Meeting Type', 'Zoom Account', 'Preferred Date', 'Start Time',
+                'End Time', 'Recurrence Frequency', 'Recurring End Date', 'Submitted At'
+            ];
+
+            const lines = [headers.map(escapeCSVValue).join(',')];
+
+            bookings.forEach(m => {
+                const row = [
+                    m.id, m.status, m.requesterName, m.department, m.meetingTitle,
+                    m.meetingType, m.zoomAccount, m.preferredDate, m.startTime,
+                    m.endTime, m.frequency, m.recurringEndDate || '', m.timestamp || ''
+                ];
+                lines.push(row.map(escapeCSVValue).join(','));
+            });
+
+            return lines.join('\r\n');
+        }
+
+        function triggerCSVDownload(csvContent, filename) {
+            // Prepend a UTF-8 BOM so accented characters open correctly in Excel
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+        }
+
+        function exportFilteredCSV() {
+            const dataToExport = getFilteredBookings();
+            if (!dataToExport.length) {
+                alert("⚠️ No bookings match the current filters, so there's nothing to export.");
+                return;
+            }
+            const dateStamp = formatDateToISO(new Date());
+            triggerCSVDownload(bookingsToCSV(dataToExport), `bookings_export_${dateStamp}.csv`);
+        }
+
+        function exportPendingCSV() {
+            const pending = adminBookingsCache.filter(m => String(m.status || "").toUpperCase().trim() === "PENDING");
+            if (!pending.length) {
+                alert("⚠️ There are no pending bookings to export right now.");
+                return;
+            }
+            const dateStamp = formatDateToISO(new Date());
+            triggerCSVDownload(bookingsToCSV(pending), `pending_bookings_${dateStamp}.csv`);
+        }
+
+        // ============================================
+        // CONFLICT DETECTION FUNCTION
+        // Check if a new meeting overlaps with existing APPROVED meetings
+        // ============================================
+        function checkForConflicts(newBooking, allBookings) {
+            const approvedBookings = allBookings.filter(b => 
+                String(b.status).toUpperCase() === "APPROVED" && b.id !== newBooking.id
+            );
+
+            const newFreq = String(newBooking.frequency || "NOT").toUpperCase().trim();
+            const newStartDate = parseAnyDate(newBooking.preferredDate);
+            if (!newStartDate) return { conflict: false };
+
+            const newEndDateBoundary = newBooking.recurringEndDate ? parseAnyDate(newBooking.recurringEndDate) : null;
+            const newHardCeilingLimit = newEndDateBoundary ? newEndDateBoundary : new Date(newStartDate.getFullYear() + 1, newStartDate.getMonth(), newStartDate.getDate());
+
+            let newCurrentDate = new Date(newStartDate.getTime());
+            const newMeetingDates = [];
+
+            // Generate all dates this new meeting will occupy
+            while (newCurrentDate.getTime() <= newHardCeilingLimit.getTime()) {
+                const dayOfWeek = newCurrentDate.getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                
+                if (!isWeekend) {
+                    newMeetingDates.push({
+                        date: formatDateToISO(newCurrentDate),
+                        startTime: newBooking.startTime,
+                        endTime: newBooking.endTime,
+                        account: newBooking.zoomAccount
+                    });
+                }
+
+                if (newFreq.includes("DAILY")) {
+                    newCurrentDate.setDate(newCurrentDate.getDate() + 1);
+                } else if (newFreq.includes("WEEKLY")) {
+                    newCurrentDate.setDate(newCurrentDate.getDate() + 7);
+                } else if (newFreq.includes("MONTHLY")) {
+                    newCurrentDate.setMonth(newCurrentDate.getMonth() + 1);
+                } else {
+                    break;
+                }
+            }
+
+            // Check each approved booking for conflicts
+            for (let approvedBooking of approvedBookings) {
+                // Only check conflicts for same account
+                if (approvedBooking.zoomAccount !== newBooking.zoomAccount) continue;
+
+                const approvedFreq = String(approvedBooking.frequency || "NOT").toUpperCase().trim();
+                const approvedStartDate = parseAnyDate(approvedBooking.preferredDate);
+                if (!approvedStartDate) continue;
+
+                const approvedEndDateBoundary = approvedBooking.recurringEndDate ? parseAnyDate(approvedBooking.recurringEndDate) : null;
+                const approvedHardCeilingLimit = approvedEndDateBoundary ? approvedEndDateBoundary : new Date(approvedStartDate.getFullYear() + 1, approvedStartDate.getMonth(), approvedStartDate.getDate());
+
+                let approvedCurrentDate = new Date(approvedStartDate.getTime());
+
+                // Generate all dates this approved meeting occupies
+                while (approvedCurrentDate.getTime() <= approvedHardCeilingLimit.getTime()) {
+                    const dayOfWeek = approvedCurrentDate.getDay();
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+                    
+                    if (!isWeekend) {
+                        const approvedIsoDate = formatDateToISO(approvedCurrentDate);
+
+                        // Check if any new meeting date matches this approved date
+                        for (let newMeeting of newMeetingDates) {
+                            if (newMeeting.date === approvedIsoDate) {
+                                // Same date - check time overlap
+                                const newStart = timeToMinutes(newMeeting.startTime);
+                                const newEnd = timeToMinutes(newMeeting.endTime);
+                                const approvedStart = timeToMinutes(approvedBooking.startTime);
+                                const approvedEnd = timeToMinutes(approvedBooking.endTime);
+
+                                // Check for time overlap
+                                if (!(newEnd <= approvedStart || newStart >= approvedEnd)) {
+                                    // Times overlap!
+                                    return {
+                                        conflict: true,
+                                        conflictingBooking: approvedBooking,
+                                        conflictDate: approvedIsoDate,
+                                        newTimeSlot: `${newMeeting.startTime} - ${newMeeting.endTime}`,
+                                        approvedTimeSlot: `${approvedBooking.startTime} - ${approvedBooking.endTime}`
+                                    };
+                                }
+                            }
+                        }
+                    }
+
+                    if (approvedFreq.includes("DAILY")) {
+                        approvedCurrentDate.setDate(approvedCurrentDate.getDate() + 1);
+                    } else if (approvedFreq.includes("WEEKLY")) {
+                        approvedCurrentDate.setDate(approvedCurrentDate.getDate() + 7);
+                    } else if (approvedFreq.includes("MONTHLY")) {
+                        approvedCurrentDate.setMonth(approvedCurrentDate.getMonth() + 1);
+                    } else {
+                        break;
+                    }
+                }
+            }
+
+            return { conflict: false };
+        }
+
+        async function approveMeetingRow(id) {
+            if (!confirm(`Are you sure you want to approve booking #${id}?`)) return;
+
+            const targetButtons = document.querySelectorAll('.approve-action-btn, .reject-action-btn');
+            targetButtons.forEach(b => b.disabled = true);
+
+            try {
+                const bookings = await loadAllBookings();
+                const booking = bookings.find(b => b.id === id);
+                if (!booking) {
+                    alert("❌ Error: booking not found.");
+                    targetButtons.forEach(b => b.disabled = false);
+                    return;
+                }
+
+                // Check for conflicts before approving
+                const conflictCheck = checkForConflicts(booking, bookings);
+                if (conflictCheck.conflict) {
+                    const conflicting = conflictCheck.conflictingBooking;
+                    alert(
+                        `❌ SCHEDULING CONFLICT DETECTED!\n\n` +
+                        `New Meeting: ${conflictCheck.newTimeSlot} on ${conflictCheck.conflictDate}\n` +
+                        `Conflicting with: "${conflicting.meetingTitle}"\n` +
+                        `Requester: ${conflicting.requesterName}\n` +
+                        `Time: ${conflictCheck.approvedTimeSlot}\n\n` +
+                        `This booking cannot be approved until the conflict is resolved.`
+                    );
+                    targetButtons.forEach(b => b.disabled = false);
+                    return;
+                }
+
+                booking.status = "APPROVED";
+                const ok = await saveAllBookings(bookings);
+                if (ok) {
+                    alert("🎉 Meeting approved! (No conflicts detected)");
+                    loadAdminData();
+                } else {
+                    alert("❌ Error saving the approval. Please try again.");
+                    targetButtons.forEach(b => b.disabled = false);
+                }
+            } catch (err) {
+                console.error("Approval error:", err);
+                alert("❌ Error processing approval: " + err.message);
+                targetButtons.forEach(b => b.disabled = false);
+            }
+        }
+
+        async function rejectMeetingRow(id) {
+            if (!confirm(`Are you sure you want to reject booking #${id}? This action cannot be undone.`)) return;
+
+            const targetButtons = document.querySelectorAll('.approve-action-btn, .reject-action-btn');
+            targetButtons.forEach(b => b.disabled = true);
+
+            try {
+                const bookings = await loadAllBookings();
+                const booking = bookings.find(b => b.id === id);
+                if (!booking) {
+                    alert("❌ Error: booking not found.");
+                    targetButtons.forEach(b => b.disabled = false);
+                    return;
+                }
+                booking.status = "REJECTED";
+                const ok = await saveAllBookings(bookings);
+                if (ok) {
+                    alert("✓ Meeting rejected and moved to history log.");
+                    loadAdminData();
+                } else {
+                    alert("❌ Error saving the rejection. Please try again.");
+                    targetButtons.forEach(b => b.disabled = false);
+                }
+            } catch (err) {
+                console.error("Rejection error:", err);
+                alert("❌ Error processing rejection: " + err.message);
+                targetButtons.forEach(b => b.disabled = false);
+            }
+        }
+
+        async function deleteMeetingRow(id) {
+            if (!confirm(`Are you sure you want to DELETE booking #${id} permanently? This action cannot be undone.`)) return;
+
+            const targetButtons = document.querySelectorAll('.delete-action-btn');
+            targetButtons.forEach(b => b.disabled = true);
+
+            try {
+                let bookings = await loadAllBookings();
+                const initialLength = bookings.length;
+                bookings = bookings.filter(b => b.id !== id);
+                
+                if (bookings.length === initialLength) {
+                    alert("❌ Error: booking not found.");
+                    targetButtons.forEach(b => b.disabled = false);
+                    return;
+                }
+
+                const ok = await saveAllBookings(bookings);
+                if (ok) {
+                    alert("🗑️ Meeting permanently deleted from the system.");
+                    loadAdminData();
+                } else {
+                    alert("❌ Error deleting the meeting. Please try again.");
+                    targetButtons.forEach(b => b.disabled = false);
+                }
+            } catch (err) {
+                console.error("Delete error:", err);
+                alert("❌ Error deleting meeting: " + err.message);
+                targetButtons.forEach(b => b.disabled = false);
+            }
+        }
+
+        // ============================================
+        // TIME LOGIC CONVERTER UTILITIES
+        // ============================================
         function formatToSheetTime(timeStr) {
             if (!timeStr) return "";
             const parts = timeStr.split(':');
@@ -432,9 +1578,40 @@
             return (hrs * 60) + mins;
         }
 
-        function parseISODate(dateStr) {
-            const parts = dateStr.split('-');
-            return new Date(parts[0], parts[1] - 1, parts[2]);
+        // ============================================
+        // CRITICAL RESILIENT MIDNIGHT-SAFE DATE PARSER
+        // Fixes calendar projection overrun bugs
+        // ============================================
+        function parseAnyDate(dateInput) {
+            if (!dateInput) return null;
+            let d = null;
+
+            if (dateInput instanceof Date) {
+                d = new Date(dateInput.getTime());
+            } else {
+                const str = String(dateInput).trim();
+                if (!str) return null;
+
+                if (/^\d{4}-\d{2}-\d{2}/.test(str)) {
+                    const parts = str.split('T')[0].split('-');
+                    d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                } else if (str.includes('/')) {
+                    const parts = str.split('/');
+                    if (parts[0].length === 4) {
+                        d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+                    } else {
+                        d = new Date(parseInt(parts[2], 10), parseInt(parts[0], 10) - 1, parseInt(parts[1], 10));
+                    }
+                } else {
+                    d = new Date(str);
+                }
+            }
+
+            if (d && !isNaN(d.getTime())) {
+                // Lock exact timestamp to local midnight (00:00:00.000)
+                return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0, 0);
+            }
+            return null;
         }
 
         function formatDateToISO(dateObj) {
@@ -444,479 +1621,448 @@
             return `${y}-${m}-${d}`;
         }
 
-        function parseDate(dateStr) {
-            if (!dateStr) return null;
-            const d = new Date(dateStr);
-            if (isNaN(d.getTime())) return null;
-            return d;
-        }
-
-        function projectRecurringEventsWithEndDate(rawMeetings, paxType) {
+        // ============================================
+        // RECURRING LOGIC IN WEB APP (PROJECTION MATRIX)
+        // Strictly stops calculations past boundary limits
+        // ============================================
+        function projectMeetings(allMeetings, selectedPax) {
             const tempDaysMap = {};
 
-            const relevantMeetings = rawMeetings.filter(m => {
-                return m.zoomAccount && m.zoomAccount.trim() === paxType;
+            // Filter for APPROVED status matching current view allocation type
+            const approvedMeetings = allMeetings.filter(m => {
+                return m.zoomAccount && m.zoomAccount.trim() === selectedPax && String(m.status).toUpperCase() === "APPROVED";
             });
-            console.log(`📊 For ${paxType}: ${relevantMeetings.length} meetings found`);
 
-            relevantMeetings.forEach(meeting => {
-                let currentTrackDate = parseISODate(meeting.originalDate);
-                const freq = meeting.frequency ? meeting.frequency.toUpperCase().trim() : "NOT";
+            approvedMeetings.forEach(meeting => {
+                const freq = meeting.frequency ? String(meeting.frequency).toUpperCase().trim() : "NOT";
+                const startTrackDate = parseAnyDate(meeting.preferredDate);
+                if (!startTrackDate) return;
+
+                // Skip if the meeting is on a weekend (regardless of recurrence)
+                const dayOfWeek = startTrackDate.getDay();
+                const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
                 
-                // Parse end date if it exists
-                let endDate = null;
-                if (meeting.recurringEndDate) {
-                    endDate = parseISODate(meeting.recurringEndDate);
+                if (isWeekend) {
+                    console.warn(`Meeting "${meeting.meetingTitle}" on ${meeting.preferredDate} is on a weekend and will not be displayed.`);
+                    return; // Skip this entire meeting
                 }
 
-                if (freq === "NOT" || freq === "NO (ONE-TIME SLOT)") {
-                    const isoStr = formatDateToISO(currentTrackDate);
-                    if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
-                    tempDaysMap[isoStr].push(meeting);
-                } 
-                else if (freq === "WEEKLY" || freq === "WEEKLY SERIES") {
-                    const limit = endDate ? endDate : new Date(2026, 11, 31);
+                const endDateBoundary = meeting.recurringEndDate ? parseAnyDate(meeting.recurringEndDate) : null;
+
+                // Fallback max window limit default constraint (1 year max ceiling boundary if undefined)
+                const hardCeilingLimit = endDateBoundary ? endDateBoundary : new Date(startTrackDate.getFullYear() + 1, startTrackDate.getMonth(), startTrackDate.getDate());
+
+                let currentTrackDate = new Date(startTrackDate.getTime());
+
+                // Loop validation logic safely matching local midnight timestamps
+                while (currentTrackDate.getTime() <= hardCeilingLimit.getTime()) {
+                    // Skip weekends (Saturday = 6, Sunday = 0) for recurring meetings
+                    const dayOfWeek = currentTrackDate.getDay();
+                    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
                     
-                    while (currentTrackDate <= limit) {
-                        const isoStr = formatDateToISO(currentTrackDate);
-                        if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
-                        if (!tempDaysMap[isoStr].some(m => m.title === meeting.title && m.start === meeting.start)) {
-                            tempDaysMap[isoStr].push(meeting);
+                    if (isWeekend) {
+                        // Skip weekends for recurring meetings
+                        if (freq.includes("DAILY")) {
+                            currentTrackDate.setDate(currentTrackDate.getDate() + 1);
+                        } else if (freq.includes("WEEKLY")) {
+                            currentTrackDate.setDate(currentTrackDate.getDate() + 7);
+                        } else if (freq.includes("MONTHLY")) {
+                            currentTrackDate.setMonth(currentTrackDate.getMonth() + 1);
                         }
-                        currentTrackDate.setDate(currentTrackDate.getDate() + 7);
+                        continue;
                     }
-                } 
-                else if (freq === "MONTHLY" || freq === "MONTHLY SERIES") {
-                    const limit = endDate ? endDate : new Date(2026, 11, 31);
-                    
-                    while (currentTrackDate <= limit) {
-                        const isoStr = formatDateToISO(currentTrackDate);
-                        if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
-                        if (!tempDaysMap[isoStr].some(m => m.title === meeting.title && m.start === meeting.start)) {
-                            tempDaysMap[isoStr].push(meeting);
-                        }
+
+                    const isoStr = formatDateToISO(currentTrackDate);
+
+                    if (!tempDaysMap[isoStr]) tempDaysMap[isoStr] = [];
+                    tempDaysMap[isoStr].push({
+                        title: meeting.meetingTitle || "Untitled Meeting",
+                        start: meeting.startTime,
+                        end: meeting.endTime,
+                        department: meeting.department,
+                        requester: meeting.requesterName,
+                        type: meeting.meetingType,
+                        frequency: freq
+                    });
+
+                    // Advance track date pointer object configuration variables
+                    if (freq.includes("DAILY")) {
+                        currentTrackDate.setDate(currentTrackDate.getDate() + 1);
+                    } else if (freq.includes("WEEKLY")) {
+                        currentTrackDate.setDate(currentTrackDate.getDate() + 7);
+                    } else if (freq.includes("MONTHLY")) {
                         currentTrackDate.setMonth(currentTrackDate.getMonth() + 1);
+                    } else {
+                        // "NOT" or One-time slot entries break processing instantly
+                        break;
                     }
                 }
             });
 
+            // Convert projection tracks mapping arrays directly to FullCalendar layout array
             const finalCalendarEvents = [];
             for (const isoKey in tempDaysMap) {
                 const dayMeetings = tempDaysMap[isoKey];
-                const hasRecurring = dayMeetings.some(m => {
-                    const f = m.frequency ? m.frequency.toUpperCase().trim() : "NOT";
-                    return f !== "NOT" && f !== "NO (ONE-TIME SLOT)";
-                });
-                
-                let dotColor = "#10b981";
+                const hasRecurring = dayMeetings.some(m => m.frequency !== "NOT" && !m.frequency.includes("NO"));
+
+                let dotColor = "#10b981"; // Green default availability indicator value
+
                 if (dayMeetings.length > 0) {
+                    const occupiedMinutes = new Set();
+                    const businessStart = 7 * 60; // 7 AM
+                    const businessEnd = 19 * 60;  // 7 PM
+                    const totalBusinessMinutes = businessEnd - businessStart;
+
+                    dayMeetings.forEach(m => {
+                        const startMins = timeToMinutes(m.start);
+                        const endMins = timeToMinutes(m.end);
+
+                        const clampedStart = Math.max(startMins, businessStart);
+                        const clampedEnd = Math.min(endMins, businessEnd);
+
+                        if (clampedStart < clampedEnd) {
+                            for (let i = clampedStart; i < clampedEnd; i++) {
+                                occupiedMinutes.add(i);
+                            }
+                        }
+                    });
+
+                    const occupiedPercent = (occupiedMinutes.size / totalBusinessMinutes) * 100;
+
                     if (hasRecurring) {
-                        dotColor = "#0E71EB";
-                    } else if (dayMeetings.length >= 4) {
-                        dotColor = "#ef4444";
-                    } else {
-                        dotColor = "#f59e0b";
+                        dotColor = "#0E71EB"; // Blue
+                    } else if (occupiedPercent >= 99) {
+                        dotColor = "#ef4444"; // Red
+                    } else if (occupiedPercent > 0) {
+                        dotColor = "#f59e0b"; // Yellow
                     }
                 }
 
                 finalCalendarEvents.push({
                     start: isoKey,
-                    title: "●", 
+                    title: "●",
                     color: "transparent",
                     textColor: dotColor,
-                    extendedProps: {
-                        meetings: dayMeetings
-                    }
+                    extendedProps: { meetings: dayMeetings }
                 });
             }
+
             return finalCalendarEvents;
         }
 
-        function parseCSV(csv) {
-            const lines = csv.trim().split('\n');
-            if (lines.length < 4) {
-                console.warn("❌ CSV has less than 4 rows");
-                return [];
-            }
+        // ============================================
+        // MODAL VIEW LAYER AND FULLCALENDAR HANDLERS
+        // ============================================
+        let inlineCalendarInstance = null;
 
-            const headers = [];
-            const csvLine = lines[3];
-            
-            let current = '';
-            let insideQuotes = false;
-            for (let j = 0; j < csvLine.length; j++) {
-                const char = csvLine[j];
-                if (char === '"') {
-                    insideQuotes = !insideQuotes;
-                } else if (char === ',' && !insideQuotes) {
-                    headers.push(current.trim().replace(/^"|"$/g, ''));
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            headers.push(current.trim().replace(/^"|"$/g, ''));
-
-            console.log("📋 Headers found:", headers);
-
-            const meetings = [];
-
-            for (let i = 4; i < lines.length; i++) {
-                const line = lines[i];
-                if (!line.trim()) continue;
-
-                const values = [];
-                let current = '';
-                let insideQuotes = false;
-
-                for (let j = 0; j < line.length; j++) {
-                    const char = line[j];
-                    if (char === '"') {
-                        insideQuotes = !insideQuotes;
-                    } else if (char === ',' && !insideQuotes) {
-                        values.push(current.trim().replace(/^"|"$/g, ''));
-                        current = '';
-                    } else {
-                        current += char;
-                    }
-                }
-                values.push(current.trim().replace(/^"|"$/g, ''));
-
-                const statusIdx = headers.indexOf("STATUS");
-                const dateIdx = headers.indexOf("PREFERRED DATE");
-                const zoomIdx = headers.indexOf("ZOOM ACCOUNT");
-                const titleIdx = headers.indexOf("MEETING TITLE");
-                const startIdx = headers.indexOf("START TIME");
-                const endIdx = headers.indexOf("END TIME");
-                const deptIdx = headers.indexOf("DEPARTMENT");
-                const reqIdx = headers.indexOf("REQUESTER NAME");
-                const typeIdx = headers.indexOf("MEETING TYPE");
-                
-                let freqIdx = -1;
-                let recurringEndDateIdx = -1;
-                
-                for (let j = 0; j < headers.length; j++) {
-                    const h = headers[j].toLowerCase();
-                    if (h.includes("recurring") && h.includes("frequency")) {
-                        freqIdx = j;
-                    }
-                    if (h.includes("recurring") && h.includes("end")) {
-                        recurringEndDateIdx = j;
-                    }
-                }
-
-                if (statusIdx === -1 || !values[statusIdx] || values[statusIdx].toUpperCase() !== "APPROVED") {
-                    continue;
-                }
-
-                const dateVal = values[dateIdx];
-                if (!dateVal) continue;
-
-                const dateObj = parseDate(dateVal);
-                if (!dateObj) continue;
-
-                const isoDate = formatDateToISO(dateObj);
-
-                let recurringEndDate = null;
-                if (recurringEndDateIdx >= 0 && values[recurringEndDateIdx]) {
-                    const endDateObj = parseDate(values[recurringEndDateIdx]);
-                    if (endDateObj) {
-                        recurringEndDate = formatDateToISO(endDateObj);
-                    }
-                }
-
-                const meeting = {
-                    title: titleIdx >= 0 ? (values[titleIdx] || "") : "",
-                    start: startIdx >= 0 ? (values[startIdx] || "") : "",
-                    end: endIdx >= 0 ? (values[endIdx] || "") : "",
-                    department: deptIdx >= 0 ? (values[deptIdx] || "") : "",
-                    requester: reqIdx >= 0 ? (values[reqIdx] || "") : "",
-                    type: typeIdx >= 0 ? (values[typeIdx] || "") : "",
-                    frequency: freqIdx >= 0 ? (values[freqIdx] || "NOT") : "NOT",
-                    recurringEndDate: recurringEndDate,
-                    originalDate: isoDate,
-                    zoomAccount: zoomIdx >= 0 ? (values[zoomIdx] || "") : ""
-                };
-
-                meetings.push(meeting);
-                console.log(`✅ Meeting added: ${meeting.title} on ${isoDate} for ${meeting.zoomAccount}`);
-            }
-
-            return meetings;
-        }
-
-        async function fetchSheetData() {
-            try {
-                console.log("🔄 Fetching from:", CSV_URL);
-                const response = await fetch(CSV_URL);
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                const csv = await response.text();
-                console.log("✅ CSV received, length:", csv.length);
-                
-                const meetings = parseCSV(csv);
-                console.log(`✅ Total meetings parsed: ${meetings.length}`);
-                
-                return meetings;
-
-            } catch (error) {
-                console.error("❌ Error fetching sheet:", error);
-                alert("Error loading data:\n" + error.message + "\n\nMake sure your Google Sheet is publicly accessible (Share > Anyone with the link)");
-                return null;
-            }
-        }
-
-        async function openSchedule(paxType) {
+        async function initializeCalendar(paxType) {
             currentPaxType = paxType;
-            const modal = document.getElementById('calendarModal');
-            document.getElementById('modalPaxTitle').innerText = paxType;
-            modal.style.display = 'flex';
+            
+            // Show the selected account display
+            document.getElementById('selectedAccountDisplay').style.display = 'block';
+            document.getElementById('selectedPaxType').innerText = paxType;
 
-            const detailsPanel = document.getElementById('detailsPanel');
-            detailsPanel.innerHTML = '<h3>Loading...</h3><p>Fetching sheet data...</p>';
+            // Load data
+            try {
+                await fetchAllMeetings();
+                
+                const eventsList = projectMeetings(allRawMeetings, paxType);
+                const calendarEl = document.getElementById('inline-calendar');
+                calendarEl.innerHTML = ''; // Clear previous
 
-            const meetings = await fetchSheetData();
-
-            if (!meetings) {
-                detailsPanel.innerHTML = `
-                    <div class="error-banner">❌ Failed to load data. Check console (F12) for details.</div>
-                    <h3>Troubleshooting:</h3>
-                    <ol style="font-size:13px; margin-left:20px;">
-                        <li>Make sure your Google Sheet is shared publicly</li>
-                        <li>Right-click sheet > "Share" > Select "Anyone with the link"</li>
-                        <li>Try refreshing the page</li>
-                    </ol>
-                `;
-                return;
-            }
-
-            if (meetings.length === 0) {
-                detailsPanel.innerHTML = `<h3>No Data</h3><p>No approved meetings found in the sheet yet.</p>`;
-                return;
-            }
-
-            allRawMeetings = meetings;
-            processedCalendarEvents = projectRecurringEventsWithEndDate(meetings, paxType);
-            console.log(`✅ Calendar events created for ${paxType}: ${processedCalendarEvents.length}`);
-
-            const calendarEl = document.getElementById('calendar-container');
-            if (calendarInstance) calendarInstance.destroy();
-
-            calendarInstance = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                initialDate: '2026-07-01',
-                headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
-                events: processedCalendarEvents,
-                selectable: true,
-                dateClick: function (info) {
-                    handleDayInteraction(info.dateStr);
+                if (inlineCalendarInstance) {
+                    inlineCalendarInstance.destroy();
                 }
-            });
-            calendarInstance.render();
 
-            detailsPanel.innerHTML = `
-                <h3>Select a Day</h3>
-                <p style="color:var(--text-secondary); font-size:13px;">Click on any day to view bookings or create a new meeting.</p>
-            `;
+                inlineCalendarInstance = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: ''
+                    },
+                    events: eventsList,
+                    dateClick: function (info) {
+                        handleCalendarDateClick(info.dateStr, eventsList);
+                    }
+                });
+
+                inlineCalendarInstance.render();
+            } catch (err) {
+                console.error("Calendar initialization error:", err);
+                alert("❌ Error loading calendar: " + err.message);
+            }
         }
 
-        function handleDayInteraction(dateStr) {
+        function openSchedule(paxType) {
+            currentPaxType = paxType;
+            document.getElementById('modalPaxTitle').innerText = paxType;
+            document.getElementById('calendarModal').style.display = 'flex';
+
+            document.getElementById('detailsPanel').innerHTML = `
+                <h3>Loading operational schedule...</h3>
+                <p style="color:var(--text-secondary); font-size:13px;">Please wait...</p>
+            `;
+
+            // Always pull the freshest data when opening, so a just-approved
+            // booking shows up immediately.
+            fetchAllMeetings().then(() => {
+                try {
+                    document.getElementById('detailsPanel').innerHTML = `
+                        <h3>Select a Date</h3>
+                        <p style="color:var(--text-secondary); font-size:13px;">Click an operational date point element on the calendar layout grid to review daily timeline tracking items and request a slot entry allocation.</p>
+                    `;
+
+                    const eventsList = projectMeetings(allRawMeetings, paxType);
+                    const calendarEl = document.getElementById('calendar-container');
+
+                    if (calendarInstance) {
+                        calendarInstance.destroy();
+                    }
+
+                    calendarInstance = new FullCalendar.Calendar(calendarEl, {
+                        initialView: 'dayGridMonth',
+                        headerToolbar: {
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: ''
+                        },
+                        events: eventsList,
+                        dateClick: function (info) {
+                            handleCalendarDateClick(info.dateStr, eventsList);
+                        }
+                    });
+
+                    calendarInstance.render();
+                } catch (calendarErr) {
+                    console.error("Calendar rendering error:", calendarErr);
+                    document.getElementById('detailsPanel').innerHTML = `
+                        <h3 style="color:#ef4444;">❌ Calendar Error</h3>
+                        <p style="color:var(--text-secondary); font-size:13px;">Failed to render calendar: ${calendarErr.message}</p>
+                    `;
+                }
+            }).catch(err => {
+                console.error("Schedule loading error:", err);
+                document.getElementById('detailsPanel').innerHTML = `
+                    <h3 style="color:#ef4444;">❌ Could not load schedule</h3>
+                    <p style="color:var(--text-secondary); font-size:13px;">Error: ${err.message || err}</p>
+                `;
+            });
+        }
+
+        function handleCalendarDateClick(dateStr, eventsList) {
             selectedDateStr = dateStr;
-            const panel = document.getElementById('detailsPanel');
+            const dayEvent = eventsList.find(e => e.start === dateStr);
+            const dayMeetings = dayEvent ? dayEvent.extendedProps.meetings : [];
 
-            const [y, m, d] = dateStr.split('-');
-            const sheetDateFormat = `${parseInt(m, 10)}/${parseInt(d, 10)}/${y}`;
+            let formHtml = `
+                <div style="margin-bottom: 1.5rem;">
+                    <h3 style="margin-bottom: 0.5rem;">Timeline for ${dateStr}</h3>
+            `;
 
-            const dayMatch = processedCalendarEvents.find(e => e.start === dateStr);
-            const existingMeetings = (dayMatch && dayMatch.extendedProps) ? dayMatch.extendedProps.meetings : [];
-
-            let html = `<h3>Agenda: ${dateStr}</h3>`;
-
-            if (existingMeetings.length === 0) {
-                html += `<p style="color:#10b981; font-size:13px; font-weight:600;">🟢 Account vacant all day. All hours open for bookings.</p>`;
+            if (dayMeetings.length === 0) {
+                formHtml += `<p style="color:#10b981; font-size:13px; font-weight:600; margin:0;">🟢 This slot is available</p>`;
             } else {
-                existingMeetings.forEach(m => {
-                    const freq = m.frequency ? m.frequency.toUpperCase().trim() : "NOT";
-                    const isRecur = freq !== "NOT" && freq !== "NO (ONE-TIME SLOT)";
-                    const recurInfo = isRecur && m.recurringEndDate ? ` (Until ${m.recurringEndDate})` : isRecur ? ' (Recurring)' : '';
-                    html += `
-                    <div class="meeting-list-item" style="border-left-color: ${isRecur ? 'var(--secondary-color)' : 'var(--primary-color)'}">
-                        <strong>${m.title || 'Untitled'}</strong> ${isRecur ? '<span style="color:var(--primary-color); font-weight:bold;">' + recurInfo + '</span>' : ''}<br>
-                        ⏰ ${m.start || 'N/A'} - ${m.end || 'N/A'}<br>
-                        <span style="font-size:11px; color:var(--text-secondary);">Dept: ${m.department || 'N/A'} | Req: ${m.requester || 'N/A'}</span>
-                    </div>`;
+                formHtml += `<p style="color:#f59e0b; font-size:13px; font-weight:600; margin:0;">🟡 Existing meetings:</p>`;
+                dayMeetings.forEach(m => {
+                    formHtml += `
+                        <div class="meeting-list-item" style="margin-top: 8px;">
+                            <strong>${m.start} - ${m.end}</strong><br>
+                            <span style="font-size:12px;">${m.title}</span>
+                        </div>
+                    `;
                 });
             }
 
-            html += `
-            <hr style="border:none; border-top:1px solid var(--border-color); margin:15px 0;">
-            <h3>New Booking Request</h3>
-            <form id="systemBookingForm" onsubmit="handleFormSubmission(event, '${sheetDateFormat}', '${dateStr}')">
-                <div class="form-group" style="margin-bottom:10px;">
-                    <label>Requester Name</label>
-                    <input type="text" id="formReqName" required>
+            formHtml += `
                 </div>
-                <div class="form-group" style="margin-bottom:10px;">
-                    <label>Department</label>
-                    <input type="text" id="formDept" required>
-                </div>
-                <div class="form-group" style="margin-bottom:10px;">
-                    <label>Meeting Title</label>
-                    <input type="text" id="formTitle" required>
-                </div>
-                <div class="form-group" style="margin-bottom:10px;">
-                    <label>Meeting Type</label>
-                    <select id="formType">
-                        <option value="Internal Meeting">Internal Meeting</option>
-                        <option value="Client Meeting">Client Meeting</option>
-                        <option value="Training">Training</option>
-                        <option value="Webinar">Webinar</option>
-                    </select>
-                </div>
-                <div style="display:flex; gap:10px; margin-bottom:10px;">
-                    <div class="form-group" style="flex:1;">
-                        <label>Start Time</label>
-                        <input type="time" id="formStart" required>
+                <hr style="border:0; border-top:1px solid var(--border-color); margin:15px 0;">
+                <form id="slotBookingForm" onsubmit="handleFormSubmission(event)">
+                    <div class="form-group">
+                        <label>Requester Name *</label>
+                        <input type="text" id="reqName" required placeholder="Ex: Maria Santos">
                     </div>
-                    <div class="form-group" style="flex:1;">
-                        <label>End Time</label>
-                        <input type="time" id="formEnd" required>
+                    <div class="form-group">
+                        <label>Department *</label>
+                        <input type="text" id="reqDept" required placeholder="Ex: Human Resources">
                     </div>
-                </div>
-                <div class="form-group" style="margin-bottom:15px;">
-                    <label>Is this a recurring meeting?</label>
-                    <select id="formFreq" onchange="toggleRecurringEndDate()">
-                        <option value="NOT">No (One-Time Slot)</option>
-                        <option value="Weekly">Weekly Series</option>
-                        <option value="Monthly">Monthly Series</option>
-                    </select>
-                </div>
-                <div id="recurringEndDateContainer" class="recurring-end-section" style="display:none;">
-                    <label for="formRecurringEndDate">When should this recurring meeting end?</label>
-                    <input type="date" id="formRecurringEndDate" disabled>
-                    <p class="info-text">📅 Select the last date this meeting should occur.</p>
-                </div>
-                <button type="submit" class="submit-btn">Submit Booking Request</button>
-            </form>`;
+                    <div class="form-group">
+                        <label>Meeting Title *</label>
+                        <input type="text" id="meetTitle" required placeholder="Ex: Monthly Operations Review">
+                    </div>
+                    <div class="form-group">
+                        <label>Meeting Type *</label>
+                        <select id="meetType" required>
+                            <option value="Meeting">Standard Meeting Room</option>
+                            <option value="Webinar">Webinar Live Broadcast</option>
+                            <option value="Workshop">Interactive Workshop Training</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="text" id="meetDate" value="${dateStr}" disabled style="background:#e2e8f0; color:#64748b;">
+                    </div>
 
-            panel.innerHTML = html;
+                    <div class="time-input-group">
+                        <div class="time-input-wrapper">
+                            <label>Start Time *</label>
+                            <input type="time" id="startTime" required>
+                        </div>
+                        <div class="time-input-wrapper">
+                            <label>End Time *</label>
+                            <input type="time" id="endTime" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Recurring? *</label>
+                        <select id="freqType" onchange="toggleRecurringEndField(this.value)" required>
+                            <option value="NOT">No (One-Time)</option>
+                            <option value="DAILY">Daily</option>
+                            <option value="WEEKLY">Weekly</option>
+                            <option value="MONTHLY">Monthly</option>
+                        </select>
+                    </div>
+
+                    <div id="recurringEndWrapper" class="recurring-end-section" style="display:none;">
+                        <label>End Date *</label>
+                        <input type="date" id="endDate">
+                        <p class="info-text">Meetings repeat until this date (Mon-Fri only)</p>
+                    </div>
+
+                    <button type="submit" class="submit-btn" style="margin-top:15px;">Submit Request</button>
+                </form>
+            `;
+
+            document.getElementById('bookingForm').innerHTML = formHtml;
+            document.getElementById('calendarModal').style.display = 'flex';
         }
 
-        function toggleRecurringEndDate() {
-            const freqSelect = document.getElementById('formFreq');
-            const container = document.getElementById('recurringEndDateContainer');
-            const input = document.getElementById('formRecurringEndDate');
-            const selectedValue = freqSelect.value;
-
-            if (selectedValue === "NOT") {
-                container.style.display = 'none';
-                input.disabled = true;
-                input.value = '';
+        function toggleRecurringEndField(val) {
+            const wrapper = document.getElementById('recurringEndWrapper');
+            const endInput = document.getElementById('endDate');
+            if (val !== 'NOT') {
+                wrapper.style.display = 'block';
+                endInput.required = true;
             } else {
-                container.style.display = 'block';
-                input.disabled = false;
-                input.min = selectedDateStr;
+                wrapper.style.display = 'none';
+                endInput.required = false;
+                endInput.value = '';
             }
         }
 
-        function handleFormSubmission(event, sheetDateFormat, isoDateStr) {
+        function validateBookingTimes(startTimeStr, endTimeStr, freqType) {
+            const startMins = timeToMinutes(startTimeStr);
+            const endMins = timeToMinutes(endTimeStr);
+            const businessStart = 7 * 60; // 7 AM
+            const businessEnd = 19 * 60; // 7 PM
+
+            // Check if times are valid
+            if (startMins === 0 || endMins === 0) {
+                return { valid: false, error: "❌ Invalid time format. Please check start and end times." };
+            }
+
+            // Check if start is before end
+            if (startMins >= endMins) {
+                return { valid: false, error: "❌ Start time must be before end time." };
+            }
+
+            // Check if times are within 7am-7pm business hours
+            if (startMins < businessStart) {
+                return { valid: false, error: `❌ Start time must be at or after 7:00 AM. Bookings are available from 7:00 AM to 7:00 PM only.` };
+            }
+
+            if (endMins > businessEnd) {
+                return { valid: false, error: `❌ End time must be at or before 7:00 PM. Bookings are available from 7:00 AM to 7:00 PM only.` };
+            }
+
+            return { valid: true };
+        }
+
+        async function handleFormSubmission(event) {
             event.preventDefault();
 
-            const startRaw = document.getElementById('formStart').value;
-            const endRaw = document.getElementById('formEnd').value;
-            const frequency = document.getElementById('formFreq').value;
-            const recurringEndDate = document.getElementById('formRecurringEndDate').value;
+            const btn = document.querySelector('.submit-btn');
+            btn.innerText = "Saving Booking...";
+            btn.disabled = true;
 
-            if (frequency !== "NOT" && !recurringEndDate) {
-                alert("⚠️ Please select an end date for the recurring meeting.");
+            const freqType = document.getElementById('freqType').value;
+            const startTimeStr = formatToSheetTime(document.getElementById('startTime').value);
+            const endTimeStr = formatToSheetTime(document.getElementById('endTime').value);
+
+            // Validate times
+            const timeValidation = validateBookingTimes(startTimeStr, endTimeStr, freqType);
+            if (!timeValidation.valid) {
+                alert(timeValidation.error);
+                btn.innerText = "Submit Booking Request";
+                btn.disabled = false;
                 return;
             }
 
-            let recurringEndDateForSheet = '';
-            if (recurringEndDate) {
-                const [y, m, d] = recurringEndDate.split('-');
-                recurringEndDateForSheet = `${parseInt(m, 10)}/${parseInt(d, 10)}/${y}`;
-            }
+            // Validate recurring end date if recurring
+            if (freqType !== 'NOT') {
+                const endDateVal = document.getElementById('endDate').value;
+                if (!endDateVal) {
+                    alert("❌ Please specify an end date for the recurring series.");
+                    btn.innerText = "Submit Booking Request";
+                    btn.disabled = false;
+                    return;
+                }
 
-            const finalStartStr = formatToSheetTime(startRaw);
-            const finalEndStr = formatToSheetTime(endRaw);
-
-            const userStartMins = timeToMinutes(finalStartStr);
-            const userEndMins = timeToMinutes(finalEndStr);
-
-            if (userEndMins <= userStartMins) {
-                alert("Mali ang Oras: End Time must be later than Start Time.");
-                return;
-            }
-
-            const dayDataMatch = processedCalendarEvents.find(e => e.start === isoDateStr);
-            if (dayDataMatch && dayDataMatch.extendedProps && dayDataMatch.extendedProps.meetings) {
-                const dayMeetings = dayDataMatch.extendedProps.meetings;
-
-                for (let i = 0; i < dayMeetings.length; i++) {
-                    const existStart = timeToMinutes(dayMeetings[i].start);
-                    const existEnd = timeToMinutes(dayMeetings[i].end);
-
-                    if (userStartMins < existEnd && userEndMins > existStart) {
-                        alert(`❌ Booking Conflict!\n"${dayMeetings[i].title}" (${dayMeetings[i].start} - ${dayMeetings[i].end})\n\nPlease select a different time.`);
-                        return;
-                    }
+                const endDateObj = parseAnyDate(endDateVal);
+                const startDateObj = parseAnyDate(selectedDateStr);
+                if (endDateObj < startDateObj) {
+                    alert("❌ Recurring end date must be on or after the start date.");
+                    btn.innerText = "Submit Booking Request";
+                    btn.disabled = false;
+                    return;
                 }
             }
 
-            const payload = {
-                requesterName: document.getElementById('formReqName').value,
-                department: document.getElementById('formDept').value,
-                meetingTitle: document.getElementById('formTitle').value,
-                meetingType: document.getElementById('formType').value,
-                preferredDate: sheetDateFormat,
-                startTime: finalStartStr,
-                endTime: finalEndStr,
-                frequency: frequency,
-                recurringEndDate: recurringEndDateForSheet,
-                zoomAccount: currentPaxType
+            const newBooking = {
+                status: "PENDING",
+                requesterName: document.getElementById('reqName').value.trim(),
+                department: document.getElementById('reqDept').value.trim(),
+                meetingTitle: document.getElementById('meetTitle').value.trim(),
+                meetingType: document.getElementById('meetType').value,
+                preferredDate: selectedDateStr,
+                startTime: startTimeStr,
+                endTime: endTimeStr,
+                frequency: freqType,
+                recurringEndDate: freqType !== 'NOT' ? document.getElementById('endDate').value : '',
+                zoomAccount: currentPaxType,
+                timestamp: new Date().toISOString()
             };
 
-            console.log("📤 Submitting payload:", payload);
+            try {
+                const bookings = await loadAllBookings();
+                newBooking.id = nextBookingId(bookings);
+                bookings.push(newBooking);
+                const ok = await saveAllBookings(bookings);
 
-            const submitBtn = event.target.querySelector('.submit-btn');
-            submitBtn.innerText = "Processing...";
-            submitBtn.disabled = true;
-
-            // Operational fix: Changing Content-Type header explicitly to 'text/plain' 
-            // completely bypasses the automated CORS preflight restriction blocks.
-            fetch(GOOGLE_APPS_SCRIPT_URL, {
-                method: "POST",
-                body: JSON.stringify(payload),
-                headers: {
-                    'Content-Type': 'text/plain'
+                if (ok) {
+                    alert("🎉 Booking submitted successfully!\nStatus: PENDING (Awaiting admin verification).");
+                    closeModal();
+                    preloadUserData();
+                } else {
+                    alert("❌ Error saving your booking. Please try again.");
+                    btn.innerText = "Submit Booking Request";
+                    btn.disabled = false;
                 }
-            })
-                .then(res => res.json())
-                .then(result => {
-                    console.log("✅ Response from Apps Script:", result);
-                    if (result.status === "success") {
-                        alert("🎉 Booking submitted successfully!\nStatus: PENDING (awaiting admin approval)");
-                        closeModal();
-                    } else {
-                        alert("Error: " + (result.message || "Unknown error"));
-                        submitBtn.innerText = "Submit Booking Request";
-                        submitBtn.disabled = false;
-                    }
-                })
-                .catch(err => {
-                    console.error("❌ Submission error:", err);
-                    alert("Network error. Check console for details.");
-                    submitBtn.innerText = "Submit Booking Request";
-                    submitBtn.disabled = false;
-                });
+            } catch (err) {
+                console.error(err);
+                alert("❌ Error saving your booking: " + (err.message || "Unknown error"));
+                btn.innerText = "Submit Booking Request";
+                btn.disabled = false;
+            }
         }
 
         function closeModal() {
             document.getElementById('calendarModal').style.display = 'none';
+            if (calendarInstance) {
+                calendarInstance.destroy();
+                calendarInstance = null;
+            }
         }
 
         document.getElementById('calendarModal').addEventListener('click', function (e) {
@@ -926,234 +2072,3 @@
 </body>
 
 </html>
-
-<!
-    // // ============================================
-    // ZOOM ACCOUNT MONITORING - Google Apps Script
-    // // ============================================
-
-    function doGet(e) {
-    try {
-        const ss = SpreadsheetApp.getActiveSpreadsheet();
-        const sheet = ss.getSheetByName("Form Responses 1");
-        
-        if (!sheet) {
-        return createJsonResponse({error: "Sheet 'Form Responses 1' not found"});
-        }
-        
-        const allData = sheet.getDataRange().getValues();
-        
-        // Headers are in row 4 (index 3)
-        const headerRow = allData[3];
-        
-        // Create a map of header name to column index
-        const headerMap = {};
-        headerRow.forEach((header, index) => {
-        const cleanHeader = String(header || "").trim().toUpperCase();
-        headerMap[cleanHeader] = index;
-        });
-        
-        Logger.log("Header Map Keys:", Object.keys(headerMap));
-        
-        // Process data rows (starting from row 5, index 4)
-        const meetings = [];
-        
-        for (let i = 4; i < allData.length; i++) {
-        const row = allData[i];
-        
-        // Skip empty rows
-        if (!row || row.length === 0) continue;
-        if (row.every(cell => !cell || String(cell).trim() === "")) continue;
-        
-        // Check if STATUS is APPROVED
-        const statusIdx = headerMap["STATUS"];
-        if (statusIdx === undefined) continue;
-        
-        const status = String(row[statusIdx] || "").trim().toUpperCase();
-        if (status !== "APPROVED") continue;
-        
-        // Extract all required fields
-        const dateIdx = headerMap["PREFERRED DATE"];
-        const zoomIdx = headerMap["ZOOM ACCOUNT"];
-        const titleIdx = headerMap["MEETING TITLE"];
-        const startIdx = headerMap["START TIME"];
-        const endIdx = headerMap["END TIME"];
-        const deptIdx = headerMap["DEPARTMENT"];
-        const reqIdx = headerMap["REQUESTER NAME"];
-        const typeIdx = headerMap["MEETING TYPE"];
-        
-        // Find frequency column (varies)
-        let freqIdx = undefined;
-        for (const key in headerMap) {
-            if (key.includes("RECURRING") && key.includes("FREQUENCY")) {
-            freqIdx = headerMap[key];
-            break;
-            }
-        }
-        
-        // Get values
-        const dateVal = dateIdx !== undefined ? row[dateIdx] : null;
-        if (!dateVal) continue;
-        
-        // Convert date to YYYY-MM-DD
-        const d = new Date(dateVal);
-        if (isNaN(d.getTime())) continue;
-        
-        const isoDate = formatDateISO(d);
-        
-        // Build meeting object
-        const meeting = {
-            title: titleIdx !== undefined ? String(row[titleIdx] || "").trim() : "",
-            start: startIdx !== undefined ? String(row[startIdx] || "").trim() : "",
-            end: endIdx !== undefined ? String(row[endIdx] || "").trim() : "",
-            department: deptIdx !== undefined ? String(row[deptIdx] || "").trim() : "",
-            requester: reqIdx !== undefined ? String(row[reqIdx] || "").trim() : "",
-            type: typeIdx !== undefined ? String(row[typeIdx] || "").trim() : "",
-            frequency: freqIdx !== undefined ? String(row[freqIdx] || "").trim() : "NOT",
-            originalDate: isoDate,
-            zoomAccount: zoomIdx !== undefined ? String(row[zoomIdx] || "").trim() : ""
-        };
-        
-        meetings.push(meeting);
-        Logger.log("✅ Added meeting:", meeting.title, "on", isoDate);
-        }
-        
-        Logger.log("✅ Total meetings found:", meetings.length);
-        
-        // Group by date for calendar display
-        const grouped = {};
-        meetings.forEach(m => {
-        if (!grouped[m.originalDate]) {
-            grouped[m.originalDate] = [];
-        }
-        grouped[m.originalDate].push(m);
-        });
-        
-        // Create calendar event array
-        const calendarEvents = [];
-        for (const dateKey in grouped) {
-        calendarEvents.push({
-            start: dateKey,
-            title: "●",
-            color: "transparent",
-            textColor: "#10b981",
-            extendedProps: {
-            meetings: grouped[dateKey]
-            }
-        });
-        }
-        
-        Logger.log("✅ Calendar events to return:", calendarEvents.length);
-        
-        return createJsonResponse(calendarEvents);
-        
-    } catch (error) {
-        Logger.error("❌ Error in doGet:", error.toString());
-        return createJsonResponse({error: error.toString()});
-    }
-    }
-
-    function doPost(e) {
-    try {
-        // 1. Verify data package contents securely
-        if (!e || !e.postData || !e.postData.contents) {
-        return createJsonResponse({ status: "error", message: "No text contents found in your form request." });
-        }
-        
-        const data = JSON.parse(e.postData.contents);
-        const ss = SpreadsheetApp.getActiveSpreadsheet();
-        const sheet = ss.getSheetByName("Form Responses 1");
-        
-        if (!sheet) {
-        return createJsonResponse({ status: "error", message: "Sheet 'Form Responses 1' not found." });
-        }
-        
-        const allData = sheet.getDataRange().getValues();
-        const headerRow = allData[3]; // Headers located on row 4 (index 3)
-        
-        if (!headerRow) {
-        return createJsonResponse({ status: "error", message: "Target sheet headers missing on row 4." });
-        }
-        
-        // 2. Build index cross-reference dictionary matching headers dynamically
-        const headerMap = {};
-        headerRow.forEach((header, index) => {
-        const cleanHeader = String(header || "").trim().toUpperCase();
-        headerMap[cleanHeader] = index;
-        });
-        
-        // Find dynamic labels for variations of recurring columns
-        let freqHeaderKey = "RECURRING FREQUENCY";
-        for (const key in headerMap) {
-        if (key.includes("RECURRING") && key.includes("FREQUENCY")) {
-            freqHeaderKey = key;
-            break;
-        }
-        }
-        
-        let endHeaderKey = "RECURRING END DATE";
-        for (const key in headerMap) {
-        if (key.includes("RECURRING") && key.includes("END")) {
-            endHeaderKey = key;
-            break;
-        }
-        }
-        
-        // 3. Line data up to standard configuration pattern structure
-        const newRow = new Array(headerRow.length).fill("");
-        
-        if (headerMap["STATUS"] !== undefined) newRow[headerMap["STATUS"]] = "APPROVED"; // Change to "PENDING" if you require human verification
-        if (headerMap["REQUESTER NAME"] !== undefined) newRow[headerMap["REQUESTER NAME"]] = data.requesterName || "";
-        if (headerMap["DEPARTMENT"] !== undefined) newRow[headerMap["DEPARTMENT"]] = data.department || "";
-        if (headerMap["MEETING TITLE"] !== undefined) newRow[headerMap["MEETING TITLE"]] = data.meetingTitle || "";
-        if (headerMap["MEETING TYPE"] !== undefined) newRow[headerMap["MEETING TYPE"]] = data.meetingType || "";
-        if (headerMap["PREFERRED DATE"] !== undefined) newRow[headerMap["PREFERRED DATE"]] = data.preferredDate || "";
-        if (headerMap["START TIME"] !== undefined) newRow[headerMap["START TIME"]] = data.startTime || "";
-        if (headerMap["END TIME"] !== undefined) newRow[headerMap["END TIME"]] = data.endTime || "";
-        if (headerMap[freqHeaderKey] !== undefined) newRow[headerMap[freqHeaderKey]] = data.frequency || "NOT";
-        if (headerMap[endHeaderKey] !== undefined) newRow[headerMap[endHeaderKey]] = data.recurringEndDate || "";
-        if (headerMap["ZOOM ACCOUNT"] !== undefined) newRow[headerMap["ZOOM ACCOUNT"]] = data.zoomAccount || "";
-        
-        if (headerMap["TIMESTAMP"] !== undefined) {
-        newRow[headerMap["TIMESTAMP"]] = new Date();
-        }
-        
-        // 4. Append operational row to targeted spreadsheet tracking index
-        sheet.appendRow(newRow);
-        return createJsonResponse({ status: "success", message: "Booking saved to storage successfully!" });
-        
-    } catch (error) {
-        return createJsonResponse({ status: "error", message: error.toString() });
-    }
-    }
-
-    // Helper: Format date to ISO (YYYY-MM-DD)
-    function formatDateISO(dateObj) {
-    const year = dateObj.getFullYear();
-    const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    return year + '-' + month + '-' + day;
-    }
-
-    // Helper: Create JSON response with proper CORS headers
-    function createJsonResponse(data) {
-    return ContentService
-        .createTextOutput(JSON.stringify(data))
-        .setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // Test function - run this to verify sheet reading
-    function testRead() {
-    const ss = SpreadsheetApp.getActiveSpreadsheet();
-    const sheet = ss.getSheetByName("Form Responses 1");
-    const allData = sheet.getDataRange().getValues();
-    
-    Logger.log("Total rows:", allData.length);
-    Logger.log("Row 3 (index 2):", allData[2]);
-    Logger.log("Row 4 (index 3) - HEADERS:", allData[3]);
-    Logger.log("Row 5 (index 4) - FIRST DATA:", allData[4]);
-    if (allData[4]) {
-        Logger.log("First row status:", allData[4][allData[3].indexOf("STATUS")]);
-    }
-    }
->
