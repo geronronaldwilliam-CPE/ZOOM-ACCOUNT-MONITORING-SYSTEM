@@ -127,12 +127,14 @@
             <input class="f-inp" id="f-date" type="date" onchange="validateFormDate(this)">
           </div>
           <div>
+            <div class="f-label">Zoom Account <span class="f-req">*</span></div>
+            <select class="f-inp" id="f-account" onchange="onBookingAccountChange()"></select>
+          </div>
+        </div>
+        <div class="f-row">
+          <div>
             <div class="f-label">Pax Room <span class="f-req">*</span></div>
-            <select class="f-inp" id="f-pax">
-              <option value="100">100 pax</option>
-              <option value="300">300 pax</option>
-              <option value="500">500 pax</option>
-            </select>
+            <select class="f-inp" id="f-pax" onchange="onPaxRoomChange()"></select>
           </div>
         </div>
         <div class="f-row">
@@ -205,6 +207,28 @@
       <div id="tab-existing" style="display:none;">
         <div id="existing-list" class="bk-list"></div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPIRY WARNING MODAL (shown when a requested meeting date is beyond the account's license expiry) -->
+<div class="overlay" id="expiry-warn-ov" onclick="if(event.target.id==='expiry-warn-ov')closeOverlay('expiry-warn-ov')">
+  <div class="modal-box" style="max-width:440px;">
+    <div class="modal-hd">
+      <div>
+        <h2><i class="ti ti-alert-triangle" style="color:#f59e0b;"></i> License Expires Before Meeting</h2>
+        <p>This booking may become invalid if the account isn't renewed.</p>
+      </div>
+      <button class="mc" onclick="closeOverlay('expiry-warn-ov')"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:13px;color:var(--text2);line-height:1.6;" id="expiry-warn-text"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="ghost-btn" onclick="closeOverlay('expiry-warn-ov')">Cancel</button>
+      <button class="sub-btn" style="width:auto;padding:7px 16px;" onclick="closeOverlay('expiry-warn-ov');proceedWithBookingSubmit();">
+        <i class="ti ti-send"></i> Submit Anyway
+      </button>
     </div>
   </div>
 </div>
@@ -512,6 +536,24 @@
         <button class="danger-btn" style="padding:7px 14px;" onclick="confirmDeleteAccount()">
           <i class="ti ti-trash"></i> Delete
         </button>
+      </div>
+    </div>
+  </div>
+  <!-- ACCOUNT RENEWAL NEEDED MODAL (blocks approval when meeting date is beyond account expiry) -->
+  <div class="overlay" id="renew-needed-ov" onclick="if(event.target.id==='renew-needed-ov')closeOverlay('renew-needed-ov')">
+    <div class="modal-box" style="max-width:440px;">
+      <div class="modal-hd">
+        <div>
+          <h2><i class="ti ti-alert-triangle" style="color:#f59e0b;"></i> Renew Account First</h2>
+          <p>This booking can't be approved yet.</p>
+        </div>
+        <button class="mc" onclick="closeOverlay('renew-needed-ov')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px;color:var(--text2);line-height:1.6;" id="renew-needed-text"></p>
+      </div>
+      <div class="modal-footer">
+        <button class="ghost-btn" onclick="closeOverlay('renew-needed-ov')">Got it</button>
       </div>
     </div>
   </div>

@@ -30,10 +30,27 @@ let bookings = loadBookings();
    ZOOM ACCOUNTS DATA LAYER
    ═══════════════════════════════════════════════════════════ */
 function loadAccounts(){
-  try{ return JSON.parse(localStorage.getItem('zms_accounts')||'null') || defaultAccounts(); }
-  catch(e){ return defaultAccounts(); }
+  let arr;
+  try{ arr = JSON.parse(localStorage.getItem('zms_accounts')||'null') || defaultAccounts(); }
+  catch(e){ arr = defaultAccounts(); }
+  if(autoExpireAccounts(arr)) saveAccounts(arr);
+  return arr;
 }
 function saveAccounts(arr){ localStorage.setItem('zms_accounts', JSON.stringify(arr)); }
+/* Flip any 'active' account whose expiry date has passed to 'expired'.
+   Runs every time accounts are loaded, so expiry is enforced automatically
+   (no need for anyone to click "Expire" manually). Returns true if anything changed. */
+function autoExpireAccounts(arr){
+  const now = new Date();
+  let changed = false;
+  arr.forEach(a=>{
+    if(a.status==='active' && a.expiry){
+      const expiryEnd = new Date(a.expiry+'T23:59:59'); // active through the entire expiry day
+      if(expiryEnd < now){ a.status = 'expired'; changed = true; }
+    }
+  });
+  return changed;
+}
 function defaultAccounts(){
   return [
     { id:'ACC-001', name:'Account Name 1', capacity:'100', status:'active',  email:'zoom-100@yourdomain.com', expiry:'2027-01-01', notes:'Primary 100-pax license.',    created:'2026-01-01' },
@@ -174,6 +191,62 @@ function getAccountById(id){
   return zoomAccounts.find(a => a.id === id) || null;
 }
 
+/* Shared helper: true if an active account's license expires within 30 days */
+function isExpiringSoon(a){
+  if(!a || a.status !== 'active' || !a.expiry) return false;
+  const msLeft = new Date(a.expiry+'T23:59:59') - new Date();
+  return msLeft > 0 && msLeft < 30*24*60*60*1000;
+}
+
+function updateBookingFormAccountSelection(){
+  const fAccount = document.getElementById('f-account');
+  const fPax = document.getElementById('f-pax');
+  if(!fAccount || !fPax) return;
+
+  const activeAccounts = zoomAccounts.filter(a => a.status === 'active');
+  fAccount.innerHTML = '';
+  activeAccounts.forEach(acc => {
+    const opt = document.createElement('option');
+    opt.value = acc.id;
+    opt.textContent = `${acc.name} — ${acc.capacity} pax`;
+    fAccount.appendChild(opt);
+  });
+
+  const selectedAccount = activeAccounts.find(a => a.id === activeAccountId) || activeAccounts[0];
+  if(selectedAccount){
+    fAccount.value = selectedAccount.id;
+    fPax.value = selectedAccount.capacity;
+    activeAccountId = selectedAccount.id;
+    activePax = selectedAccount.capacity;
+  }
+}
+
+function onBookingAccountChange(){
+  const fAccount = document.getElementById('f-account');
+  const fPax = document.getElementById('f-pax');
+  if(!fAccount || !fPax) return;
+  const selectedId = fAccount.value;
+  const selectedAcc = getAccountById(selectedId);
+  if(selectedAcc){
+    fPax.value = selectedAcc.capacity;
+    activeAccountId = selectedAcc.id;
+    activePax = selectedAcc.capacity;
+  }
+}
+
+function onPaxRoomChange(){
+  const fAccount = document.getElementById('f-account');
+  const fPax = document.getElementById('f-pax');
+  if(!fAccount || !fPax) return;
+  const selectedPax = fPax.value;
+  const matching = zoomAccounts.filter(a => a.status==='active' && a.capacity === selectedPax);
+  if(matching.length){
+    fAccount.value = matching[0].id;
+    activeAccountId = matching[0].id;
+    activePax = selectedPax;
+  }
+}
+
 const AM_WIN = [7*60, 12*60];
 const PM_WIN = [13*60, 18*60];
 function timeToMin(t){ const [h,m]=t.split(':').map(Number); return h*60+m; }
@@ -212,8 +285,16 @@ function getSlot(dateStr, pax, accountId){
 
 /* ── Rebuild user-side room buttons dynamically from accounts ── */
 function rebuildUserRoomButtons(){
+
   const activeAccounts = zoomAccounts.filter(a => a.status === 'active');
   const uniqueCaps = [...new Set(activeAccounts.map(a => a.capacity))].sort((a,b)=>parseInt(a)-parseInt(b));
+
+  // Sort accounts by numeric capacity ascending, then by name
+  const sortedAccounts = activeAccounts.slice().sort((a,b)=>{
+    const na = parseInt(a.capacity), nb = parseInt(b.capacity);
+    if(na !== nb) return na - nb;
+    return a.name.localeCompare(b.name);
+  });
 
   // Color cycle for any number of capacity tiers
   const colorCycle = ['ic-b', 'ic-t', 'ic-p', 'ic-g', 'ic-y'];
@@ -222,41 +303,66 @@ function rebuildUserRoomButtons(){
   const availableColors = colorCycle.filter(c => !usedColors.has(c));
   function getColorForCap(cap){
     if(fixedColorMap[cap]) return fixedColorMap[cap];
-    const hash = parseInt(cap) % availableColors.length;
+    const hash = parseInt(cap) % (availableColors.length || 1);
     return availableColors[hash] || colorCycle[parseInt(cap) % colorCycle.length];
   }
 
   const grid = document.getElementById('user-room-btns');
   grid.innerHTML = '';
 
-  // Also update the pax select in the booking form
   const fPax = document.getElementById('f-pax');
-  const prevPaxVal = fPax.value;
-  fPax.innerHTML = '';
+  const fAccount = document.getElementById('f-account');
+  const prevPaxVal = fPax?.value;
+  const prevAccountVal = fAccount?.value;
+  if(fPax) fPax.innerHTML = '';
+  if(fAccount) fAccount.innerHTML = '';
 
-  activeAccounts.forEach(acc => {
+  sortedAccounts.forEach(acc => {
     const ic = getColorForCap(acc.capacity);
     const btn = document.createElement('div');
     btn.className = 'room-btn';
     btn.id = 'btn-'+acc.id;
     btn.setAttribute('onclick', `openCal('${acc.capacity}','${acc.id}')`);
+    const expiringSoon = isExpiringSoon(acc);
+    let expiryBadgeHtml = '';
+    if(expiringSoon){
+      const daysLeft = Math.ceil((new Date(acc.expiry+'T23:59:59') - new Date()) / (24*60*60*1000));
+      const expiryStr = new Date(acc.expiry+'T00:00:00').toLocaleDateString('en-PH',{month:'short',day:'numeric'});
+      const label = daysLeft<=7 ? `Expires ${expiryStr} (${daysLeft}d)` : 'Expiring soon';
+      expiryBadgeHtml = `<div class="room-expiry-warn" title="License expires ${new Date(acc.expiry+'T00:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'})}"><i class="ti ti-alert-triangle"></i> ${label}</div>`;
+    }
     btn.innerHTML = `
       <div class="btn-icon ${ic}"><i class="ti ti-calendar-event"></i></div>
       <div class="btn-label">${acc.capacity} pax</div>
-      <div class="btn-sub">${acc.name}</div>`;
+      <div class="btn-sub">${acc.name}</div>
+      ${expiryBadgeHtml}`;
     grid.appendChild(btn);
 
     if(acc.id === activeAccountId) btn.classList.add('active');
+
+    if(fAccount){
+      const opt = document.createElement('option');
+      opt.value = acc.id;
+      opt.textContent = `${acc.name} — ${acc.capacity} pax`;
+      fAccount.appendChild(opt);
+    }
   });
 
   uniqueCaps.forEach(cap => {
     const opt = document.createElement('option');
     opt.value = cap;
     opt.textContent = cap + ' pax';
-    fPax.appendChild(opt);
+    if(fPax) fPax.appendChild(opt);
   });
 
   if(prevPaxVal && uniqueCaps.includes(prevPaxVal)) fPax.value = prevPaxVal;
+  if(prevAccountVal && Array.from(fAccount.options).some(opt=>opt.value===prevAccountVal)) fAccount.value = prevAccountVal;
+  if(fAccount && !fAccount.value && fAccount.options.length) fAccount.value = fAccount.options[0].value;
+
+  if(fPax && fAccount){
+    const selectedAccount = zoomAccounts.find(a=>a.id===fAccount.value);
+    if(selectedAccount) fPax.value = selectedAccount.capacity;
+  }
 
   // Also update export pax select
   const expPax = document.getElementById('exp-pax');
@@ -278,7 +384,37 @@ function rebuildUserRoomButtons(){
       '<option value="custom">Custom…</option>';
     if(allUnique.includes(currentVal)) accCapEl.value = currentVal;
   }
+
+  // Adjust responsive sizing based on number of room buttons
+  adjustRoomSizes();
 }
+
+// Dynamically adjust the CSS variable controlling room button min-width
+function adjustRoomSizes(){
+  const grid = document.getElementById('user-room-btns');
+  if(!grid) return;
+  const count = grid.children.length || 0;
+  // Choose a comfortable minimum width depending on count (smaller when many)
+  let minW = 220;
+  if(count <= 3) minW = 320;
+  else if(count <= 6) minW = 260;
+  else if(count <= 9) minW = 200;
+  else if(count <= 12) minW = 170;
+  else minW = 140;
+
+  // Respect available container width: ensure at least 1 column fits
+  const containerWidth = grid.clientWidth || document.documentElement.clientWidth;
+  if(containerWidth && minW > containerWidth) minW = Math.max(120, Math.floor(containerWidth * 0.9));
+
+  grid.style.setProperty('--room-min-width', minW + 'px');
+}
+
+// Recalculate sizes on window resize (debounced)
+let __room_size_tmr = null;
+window.addEventListener('resize', ()=>{
+  clearTimeout(__room_size_tmr);
+  __room_size_tmr = setTimeout(()=>adjustRoomSizes(), 120);
+});
 
 function renderCal(){
   if(!activePax) return;
@@ -355,6 +491,7 @@ function openCal(pax, accountId){
   if(btn){ btn.classList.add('active'); addBadge(accountId || pax); }
   document.getElementById('cal-wrap').classList.add('visible');
   renderCal();
+  updateBookingFormAccountSelection();
 }
 function closeCal(){
   if(activeAccountId){
@@ -385,8 +522,8 @@ function onDayClick(dStr, pax, accountId){
 
   document.getElementById('bm-title').textContent = label;
   document.getElementById('f-date').value = dStr;
-  document.getElementById('f-pax').value  = pax;
   activeAccountId = accountId || activeAccountId;
+  updateBookingFormAccountSelection();
   document.getElementById('f-date').min = toLocalISODate(minDate);
   document.getElementById('f-date').max = toLocalISODate(maxDate);
 
@@ -405,6 +542,11 @@ function onDayClick(dStr, pax, accountId){
     (!withinWindow ? 'View only — outside reservation window' :
      isWeekend     ? 'Weekends are not bookable' :
      'Fully booked — view only');
+
+  if(canBook){
+    const currentAcc = document.getElementById('f-account').value;
+    activeAccountId = currentAcc || activeAccountId;
+  }
 
   const tabs = document.querySelectorAll('.m-tab');
   document.getElementById('view-only-note').style.display = (!withinWindow) ? 'flex' : 'none';
@@ -547,6 +689,37 @@ function submitBooking(){
     return;
   }
 
+  const bookingData = {name,agency,title,date,start,end,pax,notes,recur,accountId,freq,count};
+
+  // Warn if the meeting (or its last recurring occurrence) falls after the
+  // Zoom account's license expiry date, instead of silently submitting it.
+  const acc = getAccountById(accountId);
+  if(acc && acc.expiry){
+    const lastDate = effDatesNew[effDatesNew.length-1];
+    if(new Date(lastDate+'T00:00:00') > new Date(acc.expiry+'T23:59:59')){
+      _pendingBooking = bookingData;
+      const expiryStr = new Date(acc.expiry+'T00:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'});
+      const lastDateStr = new Date(lastDate+'T00:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'});
+      document.getElementById('expiry-warn-text').innerHTML =
+        `The <strong>${acc.name}</strong> (${acc.capacity} pax) account's license expires on <strong>${expiryStr}</strong> — before ${recur?'the last occurrence of ':''}this meeting on <strong>${lastDateStr}</strong>. If the account isn't renewed by then, this booking will become invalid. You can still submit it now for admin review.`;
+      document.getElementById('expiry-warn-ov').classList.add('open');
+      return;
+    }
+  }
+
+  finalizeBookingSubmit(bookingData);
+}
+
+let _pendingBooking = null;
+function proceedWithBookingSubmit(){
+  if(!_pendingBooking) return;
+  finalizeBookingSubmit(_pendingBooking);
+  _pendingBooking = null;
+}
+
+function finalizeBookingSubmit(data){
+  const {name,agency,title,date,start,end,pax,notes,recur,accountId,freq,count} = data;
+  bookings = loadBookings();
   const newId = 'BK-'+String(bookings.length+1).padStart(3,'0');
   const bk = {id:newId,title,name,agency,date,shift:selShiftV,start,end,pax,accountId,
     recurring:recur,freq:recur?freq:'',count:recur?count:0,notes,
@@ -665,7 +838,7 @@ function renderAccountsGrid(){
     const rows = accounts.map(a => {
       const isExpired = a.status === 'expired';
       const expiryStr = a.expiry ? new Date(a.expiry+'T00:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'short',day:'numeric'}) : '—';
-      const isExpiringSoon = a.expiry && !isExpired && (new Date(a.expiry+'T00:00:00') - new Date()) < 30*24*60*60*1000;
+      const isExpiringSoonFlag = isExpiringSoon(a);
       return `
         <div class="acc-row ${isExpired?'acc-expired':''}">
           <div class="acc-row-left">
@@ -674,7 +847,7 @@ function renderAccountsGrid(){
               <div class="acc-name">${a.name}</div>
               <div class="acc-meta-row">
                 ${a.email ? `<span><i class="ti ti-mail" style="font-size:11px;"></i> ${a.email}</span>` : ''}
-                <span><i class="ti ti-calendar" style="font-size:11px;"></i> Expiry: ${expiryStr}${isExpiringSoon?` <span class="expiry-warn">Expiring soon</span>`:''}</span>
+                <span><i class="ti ti-calendar" style="font-size:11px;"></i> Expiry: ${expiryStr}${isExpiringSoonFlag?` <span class="expiry-warn">Expiring soon</span>`:''}</span>
                 ${a.notes ? `<span title="${a.notes}"><i class="ti ti-notes" style="font-size:11px;"></i> ${a.notes.length>40?a.notes.slice(0,40)+'…':a.notes}</span>` : ''}
               </div>
             </div>
@@ -840,9 +1013,22 @@ function setAccountStatus(id, status){
   zoomAccounts = loadAccounts();
   const a = zoomAccounts.find(a=>a.id===id);
   if(!a) return;
+  let expiryWasCleared = false;
+  if(status==='active' && a.expiry && new Date(a.expiry+'T23:59:59') < new Date()){
+    // Its old expiry date is in the past, so activating it would just get
+    // auto-expired again on the next load. Clear it so it stays active
+    // until the admin sets a new expiry date via Edit.
+    a.expiry = '';
+    expiryWasCleared = true;
+  }
   a.status = status;
   saveAccounts(zoomAccounts);
-  showToast(`"${a.name}" marked as ${status}.`, status==='active'?'success':'info');
+  showToast(
+    expiryWasCleared
+      ? `"${a.name}" reactivated. Its old expiry date was cleared — set a new one via Edit.`
+      : `"${a.name}" marked as ${status}.`,
+    status==='active'?'success':'info'
+  );
   renderAccountsGrid();
 }
 
@@ -981,6 +1167,18 @@ function updateStatus(id, status){
   const b=bookings.find(b=>b.id===id); if(!b) return;
   const bDates = getEffDates(b);
   if(status==='APPROVED'){
+    const acc = loadAccounts().find(a=>a.id===b.accountId);
+    if(acc && acc.expiry){
+      const lastDate = bDates[bDates.length-1];
+      if(new Date(lastDate+'T00:00:00') > new Date(acc.expiry+'T23:59:59')){
+        const expiryStr = new Date(acc.expiry+'T00:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'});
+        const lastDateStr = new Date(lastDate+'T00:00:00').toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric'});
+        document.getElementById('renew-needed-text').innerHTML =
+          `The <strong>${acc.name}</strong> (${acc.capacity} pax) account's license expires on <strong>${expiryStr}</strong> — before ${b.recurring?'the last occurrence of ':''}request <strong>${b.id}</strong> on <strong>${lastDateStr}</strong>. Please renew the account's expiry date in Zoom Accounts before approving this request.`;
+        document.getElementById('renew-needed-ov').classList.add('open');
+        return;
+      }
+    }
     const clash=bookings.find(o=>o.id!==b.id&&o.status==='APPROVED'&&o.pax==b.pax&&o.accountId===b.accountId&&getEffDates(o).some(d=>bDates.includes(d))&&b.start<o.end&&o.start<b.end);
     if(clash){ showToast(`Can't approve ${b.id} — overlaps approved booking ${clash.id} on the same ${b.pax} pax account.`,'error'); return; }
   }
